@@ -1,5 +1,5 @@
 package com.sts.dto.request;
 
-public record LoginRequest() {
+public record LoginRequest(String email,String password) {
 
 }
