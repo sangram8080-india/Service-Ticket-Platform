@@ -2,6 +2,8 @@ package com.sts.entity;
 
 import java.util.List;
 
+import com.sts.enums.EmployeeStatus;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
