@@ -1,0 +1,36 @@
+package com.sts.entity;
+
+@Entity
+@Table(name = "reviews")
+public class Review {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    
+    @ManyToOne
+    @JoinColumn(name = "ticket_id")
+    private Ticket ticket;
+    
+    @ManyToOne
+    @JoinColumn(name = "employee_id")
+    private Employee employee;
+    
+    @ManyToOne
+    @JoinColumn(name = "reviewer_id")
+    private User reviewer;
+    
+    @Column(nullable = false)
+    private Integer rating; // 1-5
+    
+    @Column(columnDefinition = "TEXT")
+    private String comment;
+    
+    @ElementCollection
+    @Enumerated(EnumType.STRING)
+    private List<ReviewCategory> categories;
+    
+    @CreationTimestamp
+    private LocalDateTime createdAt;
+    
+    // Constructors, getters, setters
+}
