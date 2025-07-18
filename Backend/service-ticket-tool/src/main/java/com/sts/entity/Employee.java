@@ -1,6 +1,5 @@
 package com.sts.entity;
 
-import java.lang.reflect.AccessFlag.Location;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
