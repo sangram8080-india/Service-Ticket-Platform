@@ -17,11 +17,13 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
+import lombok.NonNull;
 
 @Entity
 @Data
 @Table(name = "employees")
-public class Employee {
+public class Employee 
+{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -33,6 +35,8 @@ public class Employee {
     @Column
     private String specialization;
     
+  //  @Column(columnDefinition = "ENUM('ACTIVE', 'OFFLINE")
+    @NonNull
     @Enumerated(EnumType.STRING)
     private EmployeeStatus status; // AVAILABLE, BUSY, ON_ROUTE, OFFLINE
     
