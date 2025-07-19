@@ -22,6 +22,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Data;
+import lombok.NonNull;
 
 @Entity
 @Data
@@ -41,9 +42,11 @@ public class Ticket {
     private String description;
     
     @Enumerated(EnumType.STRING)
+    @NonNull
     private TicketPriority priority; // LOW, MEDIUM, HIGH, CRITICAL
     
     @Enumerated(EnumType.STRING)
+    @NonNull
     private TicketStatus status; // PENDING, ASSIGNED, IN_PROGRESS, RESOLVED, CLOSED
     
     @Column(nullable = false)
