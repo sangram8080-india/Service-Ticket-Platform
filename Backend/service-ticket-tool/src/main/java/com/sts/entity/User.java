@@ -24,44 +24,45 @@ import lombok.NonNull;
 
 @Entity
 @Data
+
 @Table(name = "users")
 @NoArgsConstructor
-public class User 
+public class User
 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
+
     @Column(unique = true, nullable = false)
     private String email;
-    
+
     @Column(nullable = false)
     private String password;
-    
+
     @Column(nullable = false)
     private String name;
-    
+
     @Column
     private String phone;
-    
+
     @Column
     private String department;
-    
+
     @NonNull
     @Enumerated(EnumType.STRING)
     private UserRole role; // USER, EMPLOYEE, ADMIN
-    
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Ticket> tickets;
-    
+
     @OneToMany(mappedBy = "reviewer", cascade = CascadeType.ALL)
     private List<Review> reviewsGiven;
-    
+
     @CreationTimestamp
     private LocalDateTime createdAt;
-    
+
     @UpdateTimestamp
     private LocalDateTime updatedAt;
-    
-    
-}	
+
+
+}

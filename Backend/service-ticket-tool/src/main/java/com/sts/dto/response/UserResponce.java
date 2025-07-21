@@ -10,5 +10,5 @@ public record UserResponce(
 	    String department,
 	    String role, // String representation of UserRole
 	    LocalDateTime createdAt,
-	    LocalDateTime updatedAt)// Will be mapped to UserRole enum) 
+	    LocalDateTime updatedAt)// Will be mapped to UserRole enum)
 { }

@@ -22,57 +22,59 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
 @Entity
 @Data
+@NoArgsConstructor
 @Table(name = "tickets")
 public class Ticket {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
+
     @Column(unique = true, nullable = false)
     private String ticketNumber;
-    
+
     @Column(nullable = false)
     private String title;
-    
+
     @Column(columnDefinition = "TEXT")
     private String description;
-    
+
     @Enumerated(EnumType.STRING)
     @NonNull
     private TicketPriority priority; // LOW, MEDIUM, HIGH, CRITICAL
-    
+
     @Enumerated(EnumType.STRING)
     @NonNull
     private TicketStatus status; // PENDING, ASSIGNED, IN_PROGRESS, RESOLVED, CLOSED
-    
+
     @Column(nullable = false)
     private String category;
-    
+
     @Column(nullable = false)
     private String location;
-    
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
-    
+
     @ManyToOne
     @JoinColumn(name = "assigned_employee_id")
     private Employee assignedEmployee;
-    
+
     @OneToMany(mappedBy = "ticket", cascade = CascadeType.ALL)
     private List<Review> reviews;
-    
+
     @CreationTimestamp
     private LocalDateTime createdAt;
-    
+
     @UpdateTimestamp
     private LocalDateTime updatedAt;
-    
+
     private LocalDateTime resolvedAt;
-    
+
     // Constructors, getters, setters
 }
