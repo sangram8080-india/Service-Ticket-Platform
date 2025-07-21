@@ -3,16 +3,18 @@ FROM maven:3.9.6-eclipse-temurin-17 AS builder
 
 WORKDIR /app
 
-# Copy only necessary files for efficient Docker layer caching
-COPY pom.xml .
-COPY .mvn .mvn
-COPY mvnw .
+# Copy Maven wrapper and configs
+COPY pom.xml ./
+COPY mvnw ./
+COPY .mvn .mvn/
+
+# Preload dependencies
 RUN ./mvnw dependency:go-offline
 
-# Copy rest of the source code
+# Copy the source code
 COPY . .
 
-# Build the app
+# Build the project
 RUN ./mvnw clean package -DskipTests
 
 # ------------ Stage 2: Run the application ------------
@@ -20,11 +22,10 @@ FROM eclipse-temurin:17-jdk
 
 WORKDIR /app
 
-# Copy JAR from builder stage
+# Copy built JAR from builder
 COPY --from=builder /app/target/*.jar app.jar
 
-# Expose default Spring Boot port
 EXPOSE 8080
 
-# Run the app
+# Start the Spring Boot app
 ENTRYPOINT ["java", "-jar", "app.jar"]
