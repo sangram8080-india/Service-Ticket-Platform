@@ -1,47 +1,23 @@
-    # ------------ Stage 1: Build the application ------------
-    FROM maven:3.9.6-eclipse-temurin-17 AS builder
+# Stage 1: Build
+FROM maven:3.9.6-eclipse-temurin-17 AS builder
 
-    WORKDIR /app
+WORKDIR /build
 
-    # Ensure mvnw is executable
-    RUN chmod +x mvnw
+COPY service-ticket-tool/pom.xml ./
+COPY service-ticket-tool/mvnw ./
+COPY service-ticket-tool/.mvn .mvn/
+RUN chmod +x mvnw && ./mvnw dependency:go-offline
 
-    # Copy Maven wrapper and configs
-    COPY pom.xml ./
-    COPY mvnw ./
-    COPY .mvn .mvn/
+COPY service-ticket-tool/ .
 
-    # --- Diagnostic Step 1: Verify Java environment before Maven build ---
-    RUN echo "--- Verifying Java environment in builder stage ---" && \
-        java -version && \
-        javac -version && \
-        echo "--- Java environment check complete ---"
+RUN ./mvnw clean package -DskipTests
 
-    # Preload dependencies
-    RUN echo "--- Running dependency:go-offline ---" && \
-        ./mvnw -Dmaven.repo.local=/tmp/m2-repo dependency:go-offline --batch-mode && \
-        echo "--- dependency:go-offline complete ---"
+# Stage 2: Run
+FROM eclipse-temurin:17-jdk
 
-    # Copy the source code
-    COPY . .
+WORKDIR /app
+COPY --from=builder /build/target/*.jar app.jar
 
-    # Build the project
-    # Add -e (show errors) and -X (debug output) for verbose logging
-    # Add --batch-mode for non-interactive execution
-    RUN echo "--- Building project with Maven ---" && \
-        ./mvnw clean package -DskipTests -e -X --batch-mode && \
-        echo "--- Maven build complete ---"
+EXPOSE 8080
 
-    # ------------ Stage 2: Run the application ------------
-    FROM eclipse-temurin:17-jdk
-
-    WORKDIR /app
-
-    # Copy built JAR from builder
-    COPY --from=builder /app/target/*.jar app.jar
-
-    EXPOSE 8080
-
-    # Start the Spring Boot app
-    ENTRYPOINT ["java", "-jar", "app.jar"]
-    
+ENTRYPOINT ["java", "-jar", "app.jar"]
