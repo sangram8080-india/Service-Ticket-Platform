@@ -1,23 +1,31 @@
-# Stage 1: Build
+# ------------ Stage 1: Build the application ------------
 FROM maven:3.9.6-eclipse-temurin-17 AS builder
 
-WORKDIR /build
+# Set the working directory
+WORKDIR /app
 
-COPY service-ticket-tool/pom.xml ./
-COPY service-ticket-tool/mvnw ./
-COPY service-ticket-tool/.mvn .mvn/
+# Copy pom.xml and Maven wrapper first
+COPY pom.xml ./
+COPY mvnw ./
+COPY .mvn .mvn/
+
+# Give permission and go offline (optional)
 RUN chmod +x mvnw && ./mvnw dependency:go-offline
 
-COPY service-ticket-tool/ .
+# Copy the entire source code
+COPY . .
 
+# Build the application (skip tests)
 RUN ./mvnw clean package -DskipTests
 
-# Stage 2: Run
+# ------------ Stage 2: Run the application ------------
 FROM eclipse-temurin:17-jdk
 
 WORKDIR /app
-COPY --from=builder /build/target/*.jar app.jar
 
-EXPOSE 8080
+# Copy the jar from the builder
+COPY --from=builder /app/target/*.jar app.jar
+
+EXPOSE 8081
 
 ENTRYPOINT ["java", "-jar", "app.jar"]
