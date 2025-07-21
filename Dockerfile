@@ -1,31 +1,47 @@
-# ------------ Stage 1: Build the application ------------
-FROM maven:3.9.6-eclipse-temurin-17 AS builder
+    # ------------ Stage 1: Build the application ------------
+    FROM maven:3.9.6-eclipse-temurin-17 AS builder
 
-WORKDIR /app
+    WORKDIR /app
 
-# Copy Maven wrapper and configs
-COPY pom.xml ./
-COPY mvnw ./
-COPY .mvn .mvn/
+    # Ensure mvnw is executable
+    RUN chmod +x mvnw
 
-# Preload dependencies
-RUN ./mvnw dependency:go-offline
+    # Copy Maven wrapper and configs
+    COPY pom.xml ./
+    COPY mvnw ./
+    COPY .mvn .mvn/
 
-# Copy the source code
-COPY . .
+    # --- Diagnostic Step 1: Verify Java environment before Maven build ---
+    RUN echo "--- Verifying Java environment in builder stage ---" && \
+        java -version && \
+        javac -version && \
+        echo "--- Java environment check complete ---"
 
-# Build the project
-RUN ./mvnw clean package -DskipTests
+    # Preload dependencies
+    RUN echo "--- Running dependency:go-offline ---" && \
+        ./mvnw -Dmaven.repo.local=/tmp/m2-repo dependency:go-offline --batch-mode && \
+        echo "--- dependency:go-offline complete ---"
 
-# ------------ Stage 2: Run the application ------------
-FROM eclipse-temurin:17-jdk
+    # Copy the source code
+    COPY . .
 
-WORKDIR /app
+    # Build the project
+    # Add -e (show errors) and -X (debug output) for verbose logging
+    # Add --batch-mode for non-interactive execution
+    RUN echo "--- Building project with Maven ---" && \
+        ./mvnw clean package -DskipTests -e -X --batch-mode && \
+        echo "--- Maven build complete ---"
 
-# Copy built JAR from builder
-COPY --from=builder /app/target/*.jar app.jar
+    # ------------ Stage 2: Run the application ------------
+    FROM eclipse-temurin:17-jdk
 
-EXPOSE 8080
+    WORKDIR /app
 
-# Start the Spring Boot app
-ENTRYPOINT ["java", "-jar", "app.jar"]
+    # Copy built JAR from builder
+    COPY --from=builder /app/target/*.jar app.jar
+
+    EXPOSE 8080
+
+    # Start the Spring Boot app
+    ENTRYPOINT ["java", "-jar", "app.jar"]
+    
