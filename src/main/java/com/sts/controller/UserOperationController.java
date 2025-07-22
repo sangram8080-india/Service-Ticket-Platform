@@ -38,18 +38,15 @@ public class UserOperationController
 
 	
 	/*<<----------------------This Method is Take the request and Create a New User--------->>*/
-	@PostMapping("/save")
-	public ResponseEntity<UserResponce> createUser(@RequestBody UserRequest userRequest) 
-	{
-		System.out.println("UserOperationController.createUser()");
-		UserResponce user = userService.createUser(userRequest);
-
-		if (user.id() > 0)
-			return new ResponseEntity<UserResponce>(user, HttpStatus.CREATED);
-		else
-			return new ResponseEntity<UserResponce>(HttpStatus.BAD_REQUEST);
-	}
-	
+	 @PostMapping("/save")
+    public ResponseEntity<?> createUser(@RequestBody UserRequest request) {
+        UserResponce user = userService.createUser(request);
+        if (user.id() > 0) {
+            return ResponseEntity.status(HttpStatus.CREATED).body(user);
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User registration failed");
+        }
+    }
 	
 	/*<<---------------This Method Return all the users--------->>*/
 	
