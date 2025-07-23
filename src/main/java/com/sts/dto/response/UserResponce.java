@@ -2,13 +2,15 @@ package com.sts.dto.response;
 
 import java.time.LocalDateTime;
 
+import com.sts.enums.UserRole;
+
 public record UserResponce(
-		Long id,
-	    String email,
+	    Long id,
 	    String name,
+	    String email,
 	    String phone,
 	    String department,
-	    String role, // String representation of UserRole
+	    UserRole role, 
 	    LocalDateTime createdAt,
-	    LocalDateTime updatedAt)// Will be mapped to UserRole enum)
-{ }
+	    LocalDateTime updatedAt
+	) {}
