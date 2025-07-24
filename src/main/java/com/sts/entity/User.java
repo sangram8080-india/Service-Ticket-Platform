@@ -6,6 +6,7 @@ import java.util.List;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sts.enums.UserRole;
 
 import jakarta.persistence.CascadeType;
@@ -24,11 +25,10 @@ import lombok.NonNull;
 
 @Entity
 @Data
-
-@Table(name = "users")
 @NoArgsConstructor
-public class User
-{
+@Table(name = "users")
+public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -42,19 +42,23 @@ public class User
     @Column(nullable = false)
     private String name;
 
-    @Column
     private String phone;
 
-    @Column
     private String department;
 
     @NonNull
     @Enumerated(EnumType.STRING)
     private UserRole role; // USER, EMPLOYEE, ADMIN
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Ticket> tickets;
+    private List<Ticket> tickets; // Tickets created by this user
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "assignedTo")
+    private List<Ticket> assignedTickets; // Tickets assigned to this user
+
+    @JsonIgnore
     @OneToMany(mappedBy = "reviewer", cascade = CascadeType.ALL)
     private List<Review> reviewsGiven;
 
@@ -63,6 +67,4 @@ public class User
 
     @UpdateTimestamp
     private LocalDateTime updatedAt;
-
-
 }

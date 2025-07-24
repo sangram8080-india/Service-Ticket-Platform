@@ -8,7 +8,7 @@ public record UserResponce(
 	    String name,
 	    String phone,
 	    String department,
-	    String role, // String representation of UserRole
+	    String role, 
 	    LocalDateTime createdAt,
-	    LocalDateTime updatedAt)// Will be mapped to UserRole enum)
+	    LocalDateTime updatedAt)
 { }

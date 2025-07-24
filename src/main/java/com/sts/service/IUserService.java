@@ -11,5 +11,6 @@ public interface IUserService
 	UserResponce createUser(UserRequest request);
 
 	List<UserResponce> getAllUsers();
+	
 
 }

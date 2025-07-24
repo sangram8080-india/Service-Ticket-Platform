@@ -14,18 +14,15 @@ import com.sts.repository.UserRepository;
 import com.sts.service.IUserService;
 
 @Service
-public class UserServiceImpl implements IUserService
-{
+public class UserServiceImpl implements IUserService {
 
 	@Autowired
 	private UserRepository userRepository;
 
-
-	/*<<---------------------This Method Create New User--------------------->>*/
+	/* <<---------------------This Method Create New User--------------------->> */
 	@Override
-	public UserResponce createUser(UserRequest request)
-	{
-		User user=new User();
+	public UserResponce createUser(UserRequest request) {
+		User user = new User();
 
 		user.setEmail(request.email());
 
@@ -39,50 +36,33 @@ public class UserServiceImpl implements IUserService
 
 		user.setRole(UserRole.valueOf(request.role()));
 
-
-		/*<,-----------------Saving User Object to database---------------->>>*/
+		/* <,-----------------Saving User Object to database---------------->>> */
 
 		User savedUser = userRepository.save(user);
 
-
-		/*<<--------------------Returning UserResponce Object--------------->>>*/
-		return new UserResponce(
-	            savedUser.getId(),
-	            savedUser.getEmail(),
-	            savedUser.getName(),
-	            savedUser.getPhone(),
-	            savedUser.getDepartment(),
-	            savedUser.getRole().name(),
-	            savedUser.getCreatedAt(),
-	            savedUser.getUpdatedAt()
-	     );
+		/* <<--------------------Returning UserResponce Object--------------->>> */
+		return new UserResponce(savedUser.getId(), savedUser.getEmail(), savedUser.getName(), savedUser.getPhone(),
+				savedUser.getDepartment(), savedUser.getRole().name(), savedUser.getCreatedAt(),
+				savedUser.getUpdatedAt());
 
 	}
 
-
-
-	/*<<------------This Method Return All Users-------------------------->>*/
+	/* <<------------This Method Return All Users-------------------------->> */
 	@Override
-	public List<UserResponce> getAllUsers()
-	{
+	public List<UserResponce> getAllUsers() {
 
-		/*<<--------------------Accessing Data from Database----------->>*/
+		/* <<--------------------Accessing Data from Database----------->> */
 		List<User> allUsers = userRepository.findAll();
 
+		/*
+		 * <<------Here We cannot return User data directly that's why we are converting
+		 * user data to UserResponce------------>>
+		 */
 
-		/*<<------Here We cannot return User data directly that's why we are converting user data to UserResponce------------>>*/
-
-		List<UserResponce> UserList = allUsers.stream().map(user -> new UserResponce(
-                user.getId(),
-                user.getEmail(),
-                user.getName(),
-                user.getPhone(),
-                user.getDepartment(),
-                user.getRole().name(),
-                user.getCreatedAt(),
-                user.getUpdatedAt()
-            ))
-            .collect(Collectors.toList());
+		List<UserResponce> UserList = allUsers.stream()
+				.map(user -> new UserResponce(user.getId(), user.getEmail(), user.getName(), user.getPhone(),
+						user.getDepartment(), user.getRole().name(), user.getCreatedAt(), user.getUpdatedAt()))
+				.collect(Collectors.toList());
 
 		return UserList;
 	}

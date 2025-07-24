@@ -7,5 +7,5 @@ public record UserRequest(String email,
 	    String department,
 	    String role )
 
-// Will be mapped to UserRole enum)
+
 { }

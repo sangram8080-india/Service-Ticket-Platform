@@ -27,35 +27,34 @@ import lombok.NonNull;
 @NoArgsConstructor
 @Table(name = "reviews")
 public class Review {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "ticket_id")
-    private Ticket ticket;
+	@ManyToOne
+	@JoinColumn(name = "ticket_id")
+	private Ticket ticket;
 
-    @ManyToOne
-    @JoinColumn(name = "employee_id")
-    private Employee employee;
+	@ManyToOne
+	@JoinColumn(name = "employee_id")
+	private Employee employee;
 
-    @ManyToOne
-    @JoinColumn(name = "reviewer_id")
-    private User reviewer;
+	@ManyToOne
+	@JoinColumn(name = "reviewer_id")
+	private User reviewer;
 
-    @Column(nullable = false)
-    private Integer rating; // 1-5
+	@Column(nullable = false)
+	private Integer rating; // 1-5
 
-    @Column(columnDefinition = "TEXT")
-    private String comment;
+	@Column(columnDefinition = "TEXT")
+	private String comment;
 
-    @ElementCollection
-    @Enumerated(EnumType.STRING)
-    @NonNull
-    private List<ReviewCategory> categories;
+	@ElementCollection
+	@Enumerated(EnumType.STRING)
+	@NonNull
+	private List<ReviewCategory> categories;
 
-    @CreationTimestamp
-    private LocalDateTime createdAt;
+	@CreationTimestamp
+	private LocalDateTime createdAt;
 
-    // Constructors, getters, setters
 }
