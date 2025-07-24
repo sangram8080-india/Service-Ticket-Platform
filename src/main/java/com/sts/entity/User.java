@@ -19,6 +19,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
@@ -41,6 +42,9 @@ public class User {
 
     @Column(nullable = false)
     private String name;
+
+    @Column
+    @Pattern(regexp = "^[0-9]{10}$", message = "Phone number must be exactly 10 digits")
 
     private String phone;
 

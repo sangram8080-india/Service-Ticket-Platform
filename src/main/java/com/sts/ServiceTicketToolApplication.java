@@ -7,6 +7,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class ServiceTicketToolApplication {
 
     public static void main(String[] args) {
+    	
+    	 
         SpringApplication.run(ServiceTicketToolApplication.class, args);
     }
 }
