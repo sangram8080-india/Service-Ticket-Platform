@@ -29,8 +29,6 @@ public class TicketController {
 	public ResponseEntity<TicketResponse> createTicket(@RequestBody TicketRequest request) {
 		return new ResponseEntity<>(ticketService.createTicket(request), HttpStatus.CREATED);
 	}
-	
-	
 
 	@GetMapping("/GetAllTickets")
 	public ResponseEntity<List<TicketResponse>> getAllTickets() {
@@ -47,6 +45,5 @@ public class TicketController {
 		ticketService.deleteTicket(id);
 		return ResponseEntity.ok("Ticket with ID " + id + " has been deleted successfully.");
 	}
-	
 
 }
