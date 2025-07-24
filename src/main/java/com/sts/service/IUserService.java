@@ -12,4 +12,9 @@ public interface IUserService
 
 	List<UserResponce> getAllUsers();
 
+	UserResponce updateUser(Long id, UserRequest request);
+	
+	void deleteUser(Long id);
+
+
 }

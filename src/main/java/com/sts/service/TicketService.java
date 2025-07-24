@@ -6,6 +6,13 @@ import com.sts.dto.request.TicketRequest;
 import com.sts.dto.response.TicketResponse;
 
 public interface TicketService {
-	 TicketResponse createTicket(TicketRequest request);
-	 List<TicketResponse> getAllTickets();
-	}
+	TicketResponse createTicket(TicketRequest request);
+
+	List<TicketResponse> getAllTickets();
+
+	TicketResponse updateTicket(Long id, TicketRequest request);
+	
+	void deleteTicket(Long id);
+
+
+}

@@ -9,6 +9,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import com.sts.enums.TicketPriority;
 import com.sts.enums.TicketStatus;
 
+import io.micrometer.common.lang.NonNull;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -23,13 +24,13 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 
 @Entity
 @Data
 @NoArgsConstructor
 @Table(name = "tickets")
 public class Ticket {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -45,25 +46,26 @@ public class Ticket {
 
     @Enumerated(EnumType.STRING)
     @NonNull
-    private TicketPriority priority; // LOW, MEDIUM, HIGH, CRITICAL
+    private TicketPriority priority;
 
     @Enumerated(EnumType.STRING)
     @NonNull
-    private TicketStatus status; // PENDING, ASSIGNED, IN_PROGRESS, RESOLVED, CLOSED
+    private TicketStatus status;
 
-    @Column(nullable = false)
     private String category;
 
     @Column(nullable = false)
     private String location;
 
+    // Creator of the ticket
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
+    // Person assigned to handle this ticket
     @ManyToOne
-    @JoinColumn(name = "assigned_employee_id")
-    private Employee assignedEmployee;
+    @JoinColumn(name = "assigned_to_id")
+    private User assignedTo;
 
     @OneToMany(mappedBy = "ticket", cascade = CascadeType.ALL)
     private List<Review> reviews;
@@ -75,6 +77,4 @@ public class Ticket {
     private LocalDateTime updatedAt;
 
     private LocalDateTime resolvedAt;
-
-    // Constructors, getters, setters
 }

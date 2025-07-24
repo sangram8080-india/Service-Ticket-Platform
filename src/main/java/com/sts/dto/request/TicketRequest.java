@@ -1,2 +1,14 @@
 package com.sts.dto.request;
-public record TicketRequest(String title, String description, String status) {}
+
+import com.sts.enums.TicketStatus;
+import com.sts.enums.TicketPriority;
+
+public record TicketRequest(
+    String title,
+    String description,
+    TicketStatus status,
+    TicketPriority priority,
+    String category,
+    String location,
+    Long assignedToUserId 
+) {}

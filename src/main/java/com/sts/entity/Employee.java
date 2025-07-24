@@ -40,8 +40,8 @@ public class Employee
     @Enumerated(EnumType.STRING)
     private EmployeeStatus status; // AVAILABLE, BUSY, ON_ROUTE, OFFLINE
 
-    @OneToMany(mappedBy = "assignedEmployee", cascade = CascadeType.ALL)
-    private List<Ticket> assignedTickets;
+ //   @OneToMany(mappedBy = "assignedEmployee", cascade = CascadeType.ALL)
+ //   private List<Ticket> assignedTickets;
 
     @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
     private List<Review> reviews;
