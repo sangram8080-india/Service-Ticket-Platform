@@ -1,5 +1,15 @@
 package com.sts.dto.request;
 
+
+public record UserRequest(String email,
+	    String password,
+	    String name,
+	    String phone,
+	    String department,
+	    String role )
+
+
+{ }
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -28,3 +38,4 @@ public record UserRequest(
     String role
 
 ) {}
+

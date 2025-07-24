@@ -10,7 +10,14 @@ public record UserResponce(
 	    String email,
 	    String phone,
 	    String department,
+
+	    String role, 
+	    LocalDateTime createdAt,
+	    LocalDateTime updatedAt)
+{ }
+
 	    UserRole role, 
 	    LocalDateTime createdAt,
 	    LocalDateTime updatedAt
 	) {}
+
