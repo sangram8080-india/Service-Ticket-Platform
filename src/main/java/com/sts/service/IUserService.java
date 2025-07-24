@@ -11,7 +11,7 @@ public interface IUserService
 	UserResponce createUser(UserRequest request);
 
 	List<UserResponce> getAllUsers();
-	
+
 	UserResponce updateUser(Long id, UserRequest request);
 	
 	void deleteUser(Long id);

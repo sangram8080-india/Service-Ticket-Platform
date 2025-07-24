@@ -42,6 +42,11 @@ public class UserServiceImpl implements IUserService {
 		User savedUser = userRepository.save(user);
 
 		/* <<--------------------Returning UserResponce Object--------------->>> */
+
+		return new UserResponce(savedUser.getId(), savedUser.getEmail(), savedUser.getName(), savedUser.getPhone(),
+				savedUser.getDepartment(), savedUser.getRole().name(), savedUser.getCreatedAt(),
+				savedUser.getUpdatedAt());
+
 		return new UserResponce(savedUser.getId(), savedUser.getName(), // FIXED: was swapped with email
 				savedUser.getEmail(), savedUser.getPhone(), savedUser.getDepartment(), savedUser.getRole(), // FIXED:
 																											// Enum
@@ -49,11 +54,27 @@ public class UserServiceImpl implements IUserService {
 																											// String
 				savedUser.getCreatedAt(), savedUser.getUpdatedAt());
 
+
 	}
 
 	/* <<------------This Method Return All Users-------------------------->> */
 	@Override
 	public List<UserResponce> getAllUsers() {
+
+
+		/* <<--------------------Accessing Data from Database----------->> */
+		List<User> allUsers = userRepository.findAll();
+
+		/*
+		 * <<------Here We cannot return User data directly that's why we are converting
+		 * user data to UserResponce------------>>
+		 */
+
+		List<UserResponce> UserList = allUsers.stream()
+				.map(user -> new UserResponce(user.getId(), user.getEmail(), user.getName(), user.getPhone(),
+						user.getDepartment(), user.getRole().name(), user.getCreatedAt(), user.getUpdatedAt()))
+				.collect(Collectors.toList());
+=======
 		List<User> users = userRepository.findAll();
 
 		return users.stream()
@@ -77,6 +98,7 @@ public class UserServiceImpl implements IUserService {
 		user.setRole(UserRole.valueOf(request.role()));
 
 		User updatedUser = userRepository.save(user);
+
 
 		return new UserResponce(updatedUser.getId(), updatedUser.getName(), updatedUser.getEmail(),
 				updatedUser.getPhone(), updatedUser.getDepartment(), updatedUser.getRole(), updatedUser.getCreatedAt(),

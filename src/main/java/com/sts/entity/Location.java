@@ -18,26 +18,25 @@ import lombok.Data;
 @Data
 @Table(name = "locations")
 public class Location {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-    @OneToOne
+	@OneToOne
 
-    @JoinColumn(name = "employee_id")
-    private Employee employee;
+	@JoinColumn(name = "employee_id")
+	private Employee employee;
 
-    @Column(nullable = false)
-    private Double latitude;
+	@Column(nullable = false)
+	private Double latitude;
 
-    @Column(nullable = false)
-    private Double longitude;
+	@Column(nullable = false)
+	private Double longitude;
 
-    @Column
-    private String address;
+	@Column
+	private String address;
 
-    @UpdateTimestamp
-    private LocalDateTime updatedAt;
-
+	@UpdateTimestamp
+	private LocalDateTime updatedAt;
 
 }
