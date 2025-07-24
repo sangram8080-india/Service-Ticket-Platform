@@ -23,6 +23,13 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping("/api")
 
+@CrossOrigin(origins = "*")
+// @CrossOrigin(origins = "http://localhost:3000/")
+public class UserOperationController 
+{
+
+
+
 public class UserOperationController {
 
 	/*
@@ -40,11 +47,7 @@ public class UserOperationController {
 		return new ResponseEntity<String>("Hello Ajay", HttpStatus.OK);
 	}
 
-<<<<<<< HEAD:src/main/java/com/sts/controlller/UserOperationController.java
-	/*
-	 * <<----------------------This Method is Take the request and Create a New
-	 * User--------->>
-	 */
+
 	@PostMapping("/save")
 	public ResponseEntity<UserResponce> createUser(@RequestBody @Valid UserRequest userRequest) {
 //		System.out.println("UserOperationController.createUser()");
@@ -58,7 +61,6 @@ public class UserOperationController {
 
 	/* <<---------------This Method Return all the users--------->> */
 
-=======
 	
 	/*<<----------------------This Method is Take the request and Create a New User--------->>*/
 	 @PostMapping("/save")
@@ -72,8 +74,7 @@ public class UserOperationController {
     }
 	
 	/*<<---------------This Method Return all the users--------->>*/
-	
->>>>>>> cafea55595e0e420610b7d31a7dffedaf2e9f8bd:src/main/java/com/sts/controller/UserOperationController.java
+
 	@GetMapping("/allusers")
 	public ResponseEntity<List<UserResponce>> getAllUsers() {
 		System.out.println("UserOperationController.getAllUsers()");
