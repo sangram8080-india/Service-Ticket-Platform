@@ -18,10 +18,9 @@ import com.sts.dto.request.UserRequest;
 import com.sts.dto.response.UserResponce;
 import com.sts.service.IUserService;
 
-import jakarta.validation.Valid;
-
 @RestController
 @RequestMapping("/api")
+
 
 @CrossOrigin(origins = "*")
 // @CrossOrigin(origins = "http://localhost:3000/")
@@ -48,6 +47,7 @@ public class UserOperationController {
 	}
 
 
+
 	@PostMapping("/save")
 	public ResponseEntity<UserResponce> createUser(@RequestBody @Valid UserRequest userRequest) {
 //		System.out.println("UserOperationController.createUser()");
@@ -61,6 +61,7 @@ public class UserOperationController {
 
 	/* <<---------------This Method Return all the users--------->> */
 
+
 	
 	/*<<----------------------This Method is Take the request and Create a New User--------->>*/
 	 @PostMapping("/save")
@@ -73,7 +74,6 @@ public class UserOperationController {
         }
     }
 	
-	/*<<---------------This Method Return all the users--------->>*/
 
 	@GetMapping("/allusers")
 	public ResponseEntity<List<UserResponce>> getAllUsers() {
@@ -83,21 +83,20 @@ public class UserOperationController {
 
 		return new ResponseEntity<List<UserResponce>>(allUsers, HttpStatus.OK);
 	}
-
-//	@PutMapping("/users/{id}")
-//	public ResponseEntity<UserResponce> updateUser(@PathVariable("id") Long id, @RequestBody UserRequest request) {
-//		UserResponce updatedUser = userService.updateUser(id, request);
-//	    return ResponseEntity.ok(updatedUser);
-//	}
+ 
+	
+	
 	@PutMapping("/users/{id}")
-	public ResponseEntity<UserResponce> updateUser(@PathVariable("id") Long id,  
-			@RequestBody UserRequest request) {
+	public ResponseEntity<UserResponce> updateUser(@PathVariable("id") Long id, @RequestBody UserRequest request) 
+	{
 		return new ResponseEntity<>(userService.updateUser(id, request), HttpStatus.OK);
 	}
+
 	@DeleteMapping("/users/{id}")
-	public ResponseEntity<String> deleteUser(@PathVariable("id") Long id) {
-	    userService.deleteUser(id);
-	    return ResponseEntity.ok("User deleted successfully with ID: " + id);
+	public ResponseEntity<String> deleteUser(@PathVariable("id") Long id) 
+	{
+			userService.deleteUser(id);
+			return ResponseEntity.ok("User deleted successfully with ID: " + id);	 
 	}
 
 }
