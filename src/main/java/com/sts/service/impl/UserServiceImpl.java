@@ -15,7 +15,8 @@ import com.sts.repository.UserRepository;
 import com.sts.service.IUserService;
 
 @Service
-public class UserServiceImpl implements IUserService {
+public class UserServiceImpl implements IUserService 
+{
 
 	@Autowired
 	private UserRepository userRepository;
@@ -44,48 +45,39 @@ public class UserServiceImpl implements IUserService {
 		/* <<--------------------Returning UserResponce Object--------------->>> */
 
 		return new UserResponce(savedUser.getId(), savedUser.getEmail(), savedUser.getName(), savedUser.getPhone(),
-				savedUser.getDepartment(), savedUser.getRole().name(), savedUser.getCreatedAt(),
-				savedUser.getUpdatedAt());
+				savedUser.getDepartment(), savedUser.getRole().name());
 
-		return new UserResponce(savedUser.getId(), savedUser.getName(), // FIXED: was swapped with email
-				savedUser.getEmail(), savedUser.getPhone(), savedUser.getDepartment(), savedUser.getRole(), // FIXED:
-																											// Enum
-																											// type, not
-																											// String
-				savedUser.getCreatedAt(), savedUser.getUpdatedAt());
-
-
+		 
 	}
 
+	
 	/* <<------------This Method Return All Users-------------------------->> */
 	@Override
-	public List<UserResponce> getAllUsers() {
+	public List<UserResponce> getAllUsers() 
+	{
 
 
 		/* <<--------------------Accessing Data from Database----------->> */
 		List<User> allUsers = userRepository.findAll();
 
-		/*
-		 * <<------Here We cannot return User data directly that's why we are converting
-		 * user data to UserResponce------------>>
-		 */
+		
+		
+		/* <<------Here We cannot return User data directly that's why we are converting  user data to UserResponce------------>>*/
 
 		List<UserResponce> UserList = allUsers.stream()
 				.map(user -> new UserResponce(user.getId(), user.getEmail(), user.getName(), user.getPhone(),
-						user.getDepartment(), user.getRole().name(), user.getCreatedAt(), user.getUpdatedAt()))
+						user.getDepartment(), user.getRole().name()))
 				.collect(Collectors.toList());
-=======
-		List<User> users = userRepository.findAll();
-
-		return users.stream()
-				.map(user -> new UserResponce(user.getId(), user.getName(), user.getEmail(), user.getPhone(),
-						user.getDepartment(), user.getRole(), // ✅ Pass UserRole enum directly
-						user.getCreatedAt(), user.getUpdatedAt()))
-				.collect(Collectors.toList());
+ 
+		return UserList;
 	}
+	
+	
+	/*<<----------------This Method find user and update their details------------------->>*/
 
 	@Override
-	public UserResponce updateUser(Long id, UserRequest request) {
+	public UserResponce updateUser(Long id, UserRequest request) 
+	{
 		// 1. Fetch existing user
 		User user = userRepository.findById(id)
 				.orElseThrow(() -> new RuntimeException("User not found with ID: " + id));
@@ -99,19 +91,20 @@ public class UserServiceImpl implements IUserService {
 
 		User updatedUser = userRepository.save(user);
 
-
-		return new UserResponce(updatedUser.getId(), updatedUser.getName(), updatedUser.getEmail(),
-				updatedUser.getPhone(), updatedUser.getDepartment(), updatedUser.getRole(), updatedUser.getCreatedAt(),
-				updatedUser.getUpdatedAt());
+		return new UserResponce(updatedUser.getId(), updatedUser.getEmail(), updatedUser.getName(),
+				updatedUser.getPhone(), updatedUser.getDepartment(), updatedUser.getRole().name());
 	}
+
+
+	/*<<-----------------------This Method delete User from Database-------------------------->>*/
 	
 	@Override
-	public void deleteUser(Long id) {
-	    User user = userRepository.findById(id)
-	        .orElseThrow(() -> new UserNotFoundException("User not found with ID: " + id));
-	    
-	         userRepository.delete(user);
-	}
+	public void deleteUser(Long id) 
+	{
+		User user = userRepository.findById(id)
+				.orElseThrow(() -> new UserNotFoundException("User not found with ID: " + id));
 
+		userRepository.delete(user);
+	}
 
 }

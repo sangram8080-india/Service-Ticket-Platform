@@ -18,11 +18,8 @@ import com.sts.dto.request.UserRequest;
 import com.sts.dto.response.UserResponce;
 import com.sts.service.IUserService;
 
-import jakarta.validation.Valid;
-
 @RestController
 @RequestMapping("/api")
-
 public class UserOperationController {
 
 	/*
@@ -41,24 +38,7 @@ public class UserOperationController {
 	}
 
 //<<<<<<< HEAD:src/main/java/com/sts/controlller/UserOperationController.java
-	/*
-	 * <<----------------------This Method is Take the request and Create a New
-	 * User--------->>
-	 */
-	/*@PostMapping("/save")
-	public ResponseEntity<UserResponce> createUser(@RequestBody @Valid UserRequest userRequest) {
-	//		System.out.println("UserOperationController.createUser()");
-		UserResponce user = userService.createUser(userRequest);
-	
-		if (user.id() > 0)
-			return new ResponseEntity<UserResponce>(user, HttpStatus.CREATED);
-		else
-			return new ResponseEntity<UserResponce>(HttpStatus.BAD_REQUEST);
-	}*/
-
-	/* <<---------------This Method Return all the users--------->> */
-
-//=======
+ 
 	
 	/*<<----------------------This Method is Take the request and Create a New User--------->>*/
 	 @PostMapping("/save")
@@ -73,7 +53,7 @@ public class UserOperationController {
 	
 	/*<<---------------This Method Return all the users--------->>*/
 	
-//>>>>>>> cafea55595e0e420610b7d31a7dffedaf2e9f8bd:src/main/java/com/sts/controller/UserOperationController.java
+///>>>>>>> cafea55595e0e420610b7d31a7dffedaf2e9f8bd:src/main/java/com/sts/controller/UserOperationController.java
 	@GetMapping("/allusers")
 	public ResponseEntity<List<UserResponce>> getAllUsers() {
 		System.out.println("UserOperationController.getAllUsers()");
@@ -82,21 +62,20 @@ public class UserOperationController {
 
 		return new ResponseEntity<List<UserResponce>>(allUsers, HttpStatus.OK);
 	}
-
-//	@PutMapping("/users/{id}")
-//	public ResponseEntity<UserResponce> updateUser(@PathVariable("id") Long id, @RequestBody UserRequest request) {
-//		UserResponce updatedUser = userService.updateUser(id, request);
-//	    return ResponseEntity.ok(updatedUser);
-//	}
+ 
+	
+	
 	@PutMapping("/users/{id}")
-	public ResponseEntity<UserResponce> updateUser(@PathVariable("id") Long id,  
-			@RequestBody UserRequest request) {
+	public ResponseEntity<UserResponce> updateUser(@PathVariable("id") Long id, @RequestBody UserRequest request) 
+	{
 		return new ResponseEntity<>(userService.updateUser(id, request), HttpStatus.OK);
 	}
+
 	@DeleteMapping("/users/{id}")
-	public ResponseEntity<String> deleteUser(@PathVariable("id") Long id) {
-	    userService.deleteUser(id);
-	    return ResponseEntity.ok("User deleted successfully with ID: " + id);
+	public ResponseEntity<String> deleteUser(@PathVariable("id") Long id) 
+	{
+			userService.deleteUser(id);
+			return ResponseEntity.ok("User deleted successfully with ID: " + id);	 
 	}
 
 }
