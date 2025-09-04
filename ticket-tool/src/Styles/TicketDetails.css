@@ -1,0 +1,101 @@
+.ticket-details-page {
+  padding: 2rem 0;
+}
+
+.conversation-container {
+  display: flex;
+  flex-direction: column;
+  height: 500px;
+}
+
+.messages-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1.5rem;
+  background-color: #f8fafc;
+}
+
+.message {
+  max-width: 80%;
+  margin-bottom: 1.5rem;
+  position: relative;
+}
+
+.message.sent {
+  margin-left: auto;
+}
+
+.message.sent .message-content {
+  background-color: #3498db;
+  color: white;
+  border-radius: 18px 18px 4px 18px;
+}
+
+.message.received .message-content {
+  background-color: #eaeaea;
+  color: #333;
+  border-radius: 18px 18px 18px 4px;
+}
+
+.message-header {
+  font-size: 0.8rem;
+  margin-bottom: 0.25rem;
+}
+
+.message.sent .message-header {
+  text-align: right;
+}
+
+.message-content {
+  padding: 0.75rem 1rem;
+  display: inline-block;
+}
+
+.message-input {
+  background-color: white;
+}
+
+.icon-circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bg-primary-light {
+  background-color: rgba(52, 152, 219, 0.1);
+}
+
+.attachment-card {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  width: 100%;
+}
+
+.file-icon {
+  margin-right: 0.75rem;
+  color: #6c757d;
+}
+
+.file-info {
+  flex: 1;
+}
+
+.file-name {
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.file-size {
+  font-size: 0.75rem;
+}
+
+.download-btn {
+  color: #6c757d;
+  padding: 0.25rem;
+}

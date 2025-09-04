@@ -1,0 +1,23 @@
+.new-ticket-page {
+  padding: 2rem 0;
+}
+
+.ticket-card {
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+}
+
+.preview-card {
+  border: 1px solid #eaeaea;
+  border-radius: 8px;
+  height: 100%;
+  padding: 1.5rem;
+}
+
+.ticket-meta {
+  background-color: #f8f9fa;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-top: 1.5rem;
+}

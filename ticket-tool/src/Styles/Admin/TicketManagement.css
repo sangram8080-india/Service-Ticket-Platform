@@ -1,0 +1,100 @@
+.ticket-management-container {
+  background-color: #f8f9fa;
+  min-height: 100vh;
+}
+
+.main-content {
+  margin-left: 0;
+  transition: margin-left 0.3s;
+}
+
+.stats-card {
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s;
+}
+
+.stats-card:hover {
+  transform: translateY(-5px);
+}
+
+.icon-circle {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.2rem;
+}
+
+.tickets-table {
+  margin-bottom: 0;
+}
+
+.tickets-table th {
+  border-top: none;
+  font-weight: 600;
+  color: #6c757d;
+}
+
+.ticket-row:hover {
+  background-color: rgba(0, 123, 255, 0.05);
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.chat-container {
+  border: 1px solid #dee2e6;
+  border-radius: 5px;
+  padding: 15px;
+}
+
+.chat-messages {
+  background-color: #f8f9fa;
+  border-radius: 5px;
+}
+
+.connection-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 5px;
+}
+
+.typing-indicator {
+  font-style: italic;
+  color: #6c757d;
+  padding: 5px 10px;
+}
+
+.navbar-brand {
+  font-weight: 600;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .stats-card .d-flex {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .icon-circle {
+    margin-top: 10px;
+  }
+}
+
+/* Animation for new messages */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.chat-messages > div {
+  animation: fadeIn 0.3s ease-in-out;
+}

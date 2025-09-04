@@ -6,14 +6,14 @@ import {
   BarChart, 
   ArrowLeftRight, 
   Chat, 
-  Briefcase, 
   Gear,
   ChevronDown,
   BoxArrowRight,
   Person,
-  List
+  List,
+  XLg
 } from 'react-bootstrap-icons';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import '../Styles/SideNav.css';
 
 const SideNav = () => {
@@ -22,34 +22,46 @@ const SideNav = () => {
   const [showSettingsMenu, setShowSettingsMenu] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const location = useLocation();
 
   const menuItems = [
-      // { name: 'Home', icon: <Briefcase size={18} />, path: '/' },
     { name: 'Dashboard', icon: <House size={18} />, path: '/dashboard' },
-    { name: 'Tickets', icon: <Ticket size={18} />, path: '/' },
-    { name: 'Location Tracking', icon: <People size={18} />, path: '/location-tracking' },
+    { name: 'Tickets', icon: <Ticket size={18} />, path: '/tickets' },
+    { name: 'Team', icon: <People size={18} />, path: '/team' },
     { name: 'Analytics', icon: <BarChart size={18} />, path: '/analytics' },
-    { name: 'RequestTracking', icon: <ArrowLeftRight size={18} />, path: '/track' },
-    { name: 'Services', icon: <Chat size={18} />, path: '/' },
+    { name: 'Requests', icon: <ArrowLeftRight size={18} />, path: '/requests' },
+    { name: 'Chat', icon: <Chat size={18} />, path: '/chat' },
   ];
 
   const settingsItems = [
-    { name: 'Profile', icon: <Person size={16} />, path: '/SignUp' },
+    { name: 'Profile', icon: <Person size={16} />, path: '/profile' },
     { name: 'Logout', icon: <BoxArrowRight size={16} />, path: '/login' }
   ];
 
   useEffect(() => {
     const handleResize = () => {
-      setIsMobile(window.innerWidth <= 768);
-      if (window.innerWidth > 768) {
+      const isMobileView = window.innerWidth <= 768;
+      setIsMobile(isMobileView);
+      
+      // Close mobile menu when switching to desktop view
+      if (!isMobileView && mobileMenuOpen) {
         setMobileMenuOpen(false);
       }
+      
+      // Auto-collapse sidebar on mobile
+      if (isMobileView && !collapsed) {
+        setCollapsed(true);
+      }
     };
+
+    // Set active item based on current route
+    const currentMenuItem = menuItems.find(item => location.pathname.startsWith(item.path));
+    if (currentMenuItem) setActiveItem(currentMenuItem.name);
 
     handleResize();
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
-  }, []);
+  }, [location.pathname]);
 
   const toggleSidebar = () => {
     if (isMobile) {
@@ -57,7 +69,9 @@ const SideNav = () => {
     } else {
       setCollapsed(!collapsed);
     }
-    if ((collapsed || mobileMenuOpen) && showSettingsMenu) {
+    
+    // Close settings menu when toggling sidebar
+    if (showSettingsMenu) {
       setShowSettingsMenu(false);
     }
   };
@@ -73,17 +87,33 @@ const SideNav = () => {
     }
   };
 
+  const handleNavClick = (itemName) => {
+    setActiveItem(itemName);
+    closeMobileMenu();
+  };
+
   return (
     <>
       {isMobile && (
         <button className="mobile-menu-toggle" onClick={toggleSidebar}>
-          <List size={24} />
+          {mobileMenuOpen ? <XLg size={24} /> : <List size={24} />}
         </button>
       )}
 
-      <div className={`sidebar-container ${collapsed ? 'collapsed' : ''} ${mobileMenuOpen ? 'mobile-open' : ''}`}>
+      <div 
+        className={`sidebar-container ${collapsed ? 'collapsed' : ''} ${mobileMenuOpen ? 'mobile-open' : ''}`}
+        onMouseEnter={() => !isMobile && !collapsed && setCollapsed(false)}
+        onMouseLeave={() => !isMobile && !collapsed && setCollapsed(true)}
+      >
         <div className="sidebar-header">
-          {!collapsed && <h3>ServiceTicket</h3>}
+          {!collapsed && (
+            <div className="d-flex align-items-center">
+              <div className="app-logo">
+                <Ticket size={24} />
+              </div>
+              <h3>ServiceTicket</h3>
+            </div>
+          )}
           <button className="toggle-btn" onClick={toggleSidebar}>
             {collapsed ? '→' : '←'}
           </button>
@@ -95,15 +125,15 @@ const SideNav = () => {
               <li 
                 key={item.name}
                 className={`nav-item ${activeItem === item.name ? 'active' : ''}`}
-                onClick={() => {
-                  setActiveItem(item.name);
-                  closeMobileMenu();
-                }}
+                onClick={() => handleNavClick(item.name)}
               >
                 <Link to={item.path} className="nav-link">
                   <span className="nav-icon">{item.icon}</span>
                   {!collapsed && (
                     <span className="nav-text">{item.name}</span>
+                  )}
+                  {activeItem === item.name && !collapsed && (
+                    <div className="active-indicator"></div>
                   )}
                 </Link>
               </li>
@@ -112,7 +142,6 @@ const SideNav = () => {
         </nav>
 
         <div className="sidebar-footer">
-         
           <div 
             className={`nav-item settings-item ${activeItem === 'Settings' ? 'active' : ''}`}
             onClick={toggleSettingsMenu}
@@ -135,10 +164,7 @@ const SideNav = () => {
                   to={item.path}
                   key={item.name} 
                   className="settings-menu-item"
-                  onClick={() => {
-                    console.log(item.name);
-                    closeMobileMenu();
-                  }}
+                  onClick={() => handleNavClick(item.name)}
                 >
                   <span className="settings-icon">{item.icon}</span>
                   <span>{item.name}</span>
@@ -158,7 +184,3 @@ const SideNav = () => {
 };
 
 export default SideNav;
-
-
-
-

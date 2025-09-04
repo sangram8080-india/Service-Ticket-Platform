@@ -1,236 +1,181 @@
-import React, { useState } from "react";
-import "bootstrap/dist/css/bootstrap.min.css";
-import "../../Styles/ServiceRequestForm.css"; 
-import LocationDetector from "../../Components/LocationDetector";
+import React, { useState, useEffect, useContext } from "react";
+import { Container, Card, Form, Button, Spinner, Alert } from "react-bootstrap";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { AuthContext } from '../../context/AuthContext';
+
 const NewTicket = () => {
-  const [formData, setFormData] = useState({
-    requestTitle: "",
-    category: "",
-    priority: "",
-    urgency: "",
-    location: "",
+  const [form, setForm] = useState({
+    title: "",
     description: "",
-    files: [],
+    priority: "LOW",
+    latitude: null,
+    longitude: null,
   });
 
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+  const navigate = useNavigate();
+  const { user } = useContext(AuthContext);
+
+  useEffect(() => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          setForm((prev) => ({
+            ...prev,
+            latitude: pos.coords.latitude,
+            longitude: pos.coords.longitude,
+          }));
+        },
+        (err) => console.error("Geolocation error:", err)
+      );
+    }
+  }, []);
+
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleFileChange = (e) => {
-    setFormData((prev) => ({
-      ...prev,
-      files: [...e.target.files],
-    }));
-  };
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form submitted:", formData);
-    alert("Ticket submitted successfully!");
+    setError("");
+    setSuccess("");
+    setLoading(true);
+
+    try {
+      const token = localStorage.getItem("token");
+      const userId = user?.id || localStorage.getItem("userId");
+
+      if (!userId) {
+        setError("User not authenticated. Please login again.");
+        setLoading(false);
+        return;
+      }
+
+      if (!token) {
+        setError("Authentication token missing. Please login again.");
+        setLoading(false);
+        return;
+      }
+
+      const response = await axios.post(
+        `http://localhost:8080/api/tickets/create/${userId}`,
+        form,
+        {
+          headers: { 
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+        }
+      );
+
+      console.log("Ticket created successfully:", response.data);
+      setSuccess("✅ Ticket created successfully!");
+      setTimeout(() => navigate("/user-portal/tickets"), 1500);
+    } catch (err) {
+      console.error("❌ Ticket creation failed:", err);
+      setError(err.response?.data?.message || "Failed to create ticket. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <>
-    <div className="container mt-5 service-request-container">
-      <div className="card shadow-lg">
-        <div className="card-header text-white">
-          <h2 className="mb-1">New Service Request</h2>
-          <p className="mb-0 opacity-75">
-            Submit a new ticket for support or maintenance
-          </p>
-        </div>
+    <Container className="my-5">
+      <Card className="shadow-sm border-0">
+        <Card.Header className="bg-white border-0 py-3">
+          <h4 className="mb-0 fw-bold">Create New Ticket</h4>
+        </Card.Header>
+        <Card.Body>
+          {error && <Alert variant="danger">{error}</Alert>}
+          {success && <Alert variant="success">{success}</Alert>}
 
-        <div className="card-body">
-          <form onSubmit={handleSubmit}>
-            <div className="mb-4">
-              <label htmlFor="requestTitle" className="form-label fw-bold">
-                Request Title
-              </label>
-              <input
+          <Form onSubmit={handleSubmit}>
+            <Form.Group className="mb-3">
+              <Form.Label>Title *</Form.Label>
+              <Form.Control
                 type="text"
-                className="form-control form-control-lg"
-                id="requestTitle"
-                name="requestTitle"
-                placeholder="Enter request title"
-                value={formData.requestTitle}
+                name="title"
+                placeholder="Enter ticket title"
+                value={form.title}
                 onChange={handleChange}
                 required
+                minLength={5}
               />
-            </div>
+            </Form.Group>
 
-            <div className="mb-4">
-              <label htmlFor="category" className="form-label fw-bold">
-                Category
-              </label>
-              <select
-                className="form-select form-select-lg"
-                id="category"
-                name="category"
-                value={formData.category}
+            <Form.Group className="mb-3">
+              <Form.Label>Description *</Form.Label>
+              <Form.Control
+                as="textarea"
+                rows={4}
+                name="description"
+                placeholder="Describe your issue in detail"
+                value={form.description}
+                onChange={handleChange}
+                required
+                minLength={10}
+              />
+            </Form.Group>
+
+            <Form.Group className="mb-3">
+              <Form.Label>Priority *</Form.Label>
+              <Form.Select
+                name="priority"
+                value={form.priority}
                 onChange={handleChange}
                 required
               >
-                <option value="">Select category</option>
-                <option value="Technical">Technical Support</option>
-                <option value="Maintenance">Facility Maintenance</option>
-                <option value="Equipment">Equipment Request</option>
-                <option value="Other">Other</option>
-              </select>
-            </div>
+                <option value="LOW">Low</option>
+                <option value="MEDIUM">Medium</option>
+                <option value="HIGH">High</option>
+                <option value="URGENT">Urgent</option>
+              </Form.Select>
+            </Form.Group>
 
-            <div className="row mb-4">
-              <div className="col-md-6">
-                <label className="form-label fw-bold">Priority Level</label>
-                <div className="form-check">
-                  <input
-                    type="radio"
-                    name="priority"
-                    id="priorityHigh"
-                    value="High"
-                    className="form-check-input"
-                    checked={formData.priority === "High"}
-                    onChange={handleChange}
-                    required
-                  />
-                  <label htmlFor="priorityHigh" className="form-check-label">
-                    High (Business Critical)
-                  </label>
-                </div>
-                <div className="form-check">
-                  <input
-                    type="radio"
-                    name="priority"
-                    id="priorityMedium"
-                    value="Medium"
-                    className="form-check-input"
-                    checked={formData.priority === "Medium"}
-                    onChange={handleChange}
-                  />
-                  <label htmlFor="priorityMedium" className="form-check-label">
-                    Medium (Home Policy)
-                  </label>
-                </div>
-                <div className="form-check">
-                  <input
-                    type="radio"
-                    name="priority"
-                    id="priorityLow"
-                    value="Low"
-                    className="form-check-input"
-                    checked={formData.priority === "Low"}
-                    onChange={handleChange}
-                  />
-                  <label htmlFor="priorityLow" className="form-check-label">
-                    Low (General Inquiry)
-                  </label>
-                </div>
+            <Form.Group className="mb-3">
+              <Form.Label>Location (Auto-detected)</Form.Label>
+              <div className="d-flex gap-3">
+                <Form.Control
+                  type="text"
+                  value={form.latitude ? form.latitude.toFixed(6) : "Not available"}
+                  placeholder="Latitude"
+                  readOnly
+                />
+                <Form.Control
+                  type="text"
+                  value={form.longitude ? form.longitude.toFixed(6) : "Not available"}
+                  placeholder="Longitude"
+                  readOnly
+                />
               </div>
+              <Form.Text className="text-muted">
+                Location is automatically detected from your device
+              </Form.Text>
+            </Form.Group>
 
-              <div className="col-md-6">
-                <label htmlFor="urgency" className="form-label fw-bold">
-                  Urgency
-                </label>
-                <select
-                  className="form-select form-select-lg"
-                  id="urgency"
-                  name="urgency"
-                  value={formData.urgency}
-                  onChange={handleChange}
-                >
-                  <option value="">Select urgency level</option>
-                  <option value="Critical">Critical (Immediate)</option>
-                  <option value="High">High (24 hours)</option>
-                  <option value="Medium">Medium (3 days)</option>
-                  <option value="Low">Low (Whenever possible)</option>
-                </select>
-              </div>
+            <div className="d-flex gap-2">
+              <Button 
+                type="submit" 
+                variant="primary" 
+                disabled={loading}
+                className="px-4"
+              >
+                {loading ? <Spinner animation="border" size="sm" /> : "Create Ticket"}
+              </Button>
+              <Button 
+                variant="outline-secondary" 
+                onClick={() => navigate("/user-portal/tickets")}
+              >
+                Cancel
+              </Button>
             </div>
-
-            {/* Location */}
-            <div className="mb-4">
-              <label htmlFor="location" className="form-label fw-bold">
-                Location
-              </label>
-
-              <input
-                type="text"
-                className="form-control form-control-lg"
-                id="location"
-                name="location"
-                placeholder="e.g., Building A, 3rd Floor"
-                value={formData.location}
-                onChange={handleChange}
-              />
-
-              <LocationDetector
-                onDetect={(loc) => setFormData({ ...formData, location: loc })}
-              />
-            </div>
-
-            <div className="mb-4">
-              <label htmlFor="description" className="form-label fw-bold">
-                Description
-              </label>
-              <textarea
-                className="form-control form-control-lg"
-                id="description"
-                name="description"
-                rows="5"
-                placeholder="Describe your issue/request in detail..."
-                value={formData.description}
-                onChange={handleChange}
-                required
-              ></textarea>
-              <div className="form-text">
-                Be as detailed as possible for quicker resolution
-              </div>
-            </div>
-
-            <div className="mb-4">
-              <h5 className="fw-bold">Attachments</h5>
-              <p className="text-muted">
-                Upload images, documents, or PDFs (Max 10MB)
-              </p>
-              <input
-                type="file"
-                id="fileUpload"
-                className="form-control"
-                multiple
-                onChange={handleFileChange}
-              />
-              {formData.files.length > 0 && (
-                <ul className="list-group mt-3">
-                  {Array.from(formData.files).map((file, index) => (
-                    <li
-                      key={index}
-                      className="list-group-item d-flex justify-content-between align-items-center"
-                    >
-                      {file.name}
-                      <span className="badge bg-secondary">
-                        {Math.round(file.size / 1024)} KB
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </div>
-
-            <div className="d-grid mt-4">
-              <button type="submit" className="btn bg-gradient-orange  btn-lg">
-                <i className="bi bi-send-fill me-2"></i> Submit Ticket
-              </button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
-   
-    </>
+          </Form>
+        </Card.Body>
+      </Card>
+    </Container>
   );
 };
 

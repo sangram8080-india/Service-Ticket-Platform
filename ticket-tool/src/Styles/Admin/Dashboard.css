@@ -1,0 +1,51 @@
+.dashboard-container {
+  padding: 20px;
+}
+
+.search-card {
+  margin-bottom: 20px;
+}
+
+.search-input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.stats-card {
+  text-align: center;
+  margin-bottom: 20px;
+  height: 100%;
+}
+
+.stats-card h2 {
+  font-size: 2rem;
+  margin: 10px 0;
+}
+
+.trend-up {
+  color: #28a745;
+}
+
+.trend-down {
+  color: #dc3545;
+}
+
+.card {
+  margin-bottom: 20px;
+  box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.1);
+}
+
+.card-header {
+  background-color: #f8f9fc;
+  border-bottom: 1px solid #e3e6f0;
+}
+
+.table {
+  margin-top: 20px;
+}
+
+.text-muted {
+  color: #6c757d;
+}

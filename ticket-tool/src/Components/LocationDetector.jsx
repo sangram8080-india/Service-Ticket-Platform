@@ -1,55 +1,34 @@
-import React, { useState } from 'react';
-import { Button, Spinner, Alert } from 'react-bootstrap';
+import React from 'react';
+import { Button } from 'react-bootstrap';
+import { GeoAlt } from 'react-bootstrap-icons';
 
 const LocationDetector = ({ onDetect }) => {
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
-
-  const handleDetect = () => {
-    setLoading(true);
-    setError('');
-
-    if (!navigator.geolocation) {
-      setError('Geolocation is not supported.');
-      setLoading(false);
-      return;
-    }
-
-    navigator.geolocation.getCurrentPosition(
-      async (position) => {
-        const { latitude, longitude } = position.coords;
-        try {
-          const res = await fetch(
-            `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`
-          );
-          const data = await res.json();
-          const location = data.display_name || `Lat: ${latitude}, Lon: ${longitude}`;
-          onDetect(location);
-        } catch (err) {
-          onDetect(`Lat: ${latitude}, Lon: ${longitude}`);
-        } finally {
-          setLoading(false);
+  const handleDetectLocation = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        position => {
+          const { latitude, longitude } = position.coords;
+          onDetect(`Lat: ${latitude.toFixed(4)}, Lng: ${longitude.toFixed(4)}`);
+        },
+        error => {
+          console.error('Error getting location:', error);
+          onDetect('Location access denied or unavailable');
         }
-      },
-      () => {
-        setError('Unable to fetch your location.');
-        setLoading(false);
-      }
-    );
+      );
+    } else {
+      onDetect('Geolocation is not supported by this browser.');
+    }
   };
 
   return (
     <div className="mt-2">
-      <Button variant="outline-secondary" size="sm" onClick={handleDetect} disabled={loading}>
-        {loading ? (
-          <>
-            <Spinner animation="border" size="sm" /> Detecting...
-          </>
-        ) : (
-          <>📍 Use My Location</>
-        )}
+      <Button 
+        variant="outline-primary" 
+        size="sm"
+        onClick={handleDetectLocation}
+      >
+        <GeoAlt className="me-1" /> Detect My Location
       </Button>
-      {error && <Alert variant="danger" className="mt-2 py-1">{error}</Alert>}
     </div>
   );
 };

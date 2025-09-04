@@ -1,13 +1,281 @@
-.bg-text-gradient-blue {
-  background-color:rgb(17 24 39/var(--tw-bg-opacity,1));
-}
-.sidebar-image {
-  animation: float 3s ease-in-out infinite;
+/* SignUp.css - Enhanced Banner Design */
+
+.enterprise-landscape {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
 
-/* Optional floating animation */
-@keyframes float {
-  0% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
-  100% { transform: translateY(0); }
+.corporate-banner {
+  background: linear-gradient(135deg, rgba(44, 62, 80, 0.95) 0%, rgba(52, 73, 94, 0.95) 100%);
+  backdrop-filter: blur(10px);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.corporate-banner::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M 20 0 L 0 0 0 20" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+  pointer-events: none;
+}
+
+.banner-logo {
+  width: 180px;
+  height: 180px;
+  object-fit: contain;
+  filter: brightness(0) invert(1) drop-shadow(0 8px 20px rgba(255, 255, 255, 0.3));
+  margin-bottom: 2rem;
+}
+
+.banner-features {
+  text-align: center;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.feature-item {
+  padding: 0.75rem 0;
+  font-size: 1.1rem;
+  font-weight: 300;
+  opacity: 0.9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.feature-item i {
+  font-size: 1.2rem;
+  margin-right: 0.5rem;
+}
+
+.seamless-form-section {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-left: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: -10px 0 30px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.seamless-form-container {
+  padding: 3rem;
+  max-width: 500px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* Form Elements */
+.form-label {
+  font-weight: 700;
+  font-size: 0.8rem;
+  color: #2d3748;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 0.5rem;
+}
+
+.seamless-input {
+  border: none;
+  border-bottom: 2px solid #e2e8f0;
+  border-radius: 0;
+  padding: 0.75rem 0;
+  font-size: 1rem;
+  background: transparent;
+  transition: all 0.3s ease;
+}
+
+.seamless-input:focus {
+  border-bottom-color: #667eea;
+  box-shadow: none;
+  background: transparent;
+}
+
+.seamless-input::placeholder {
+  color: #a0aec0;
+  font-size: 0.9rem;
+  opacity: 0.7;
+}
+
+.help-text {
+  font-size: 0.75rem;
+  color: #718096;
+  margin-top: 0.25rem;
+  display: block;
+}
+
+/* Buttons */
+.seamless-btn {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+  margin-top: 1rem;
+}
+
+.seamless-btn:hover {
+  background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+.seamless-btn:active {
+  transform: translateY(0);
+}
+
+/* Alerts */
+.seamless-alert {
+  border: none;
+  border-radius: 8px;
+  padding: 1rem;
+  font-size: 0.9rem;
+  margin-bottom: 1.5rem;
+}
+
+.seamless-alert.alert-danger {
+  background: linear-gradient(135deg, #fc8181 0%, #e53e3e 100%);
+  color: white;
+}
+
+.seamless-alert.alert-success {
+  background: linear-gradient(135deg, #68d391 0%, #38a169 100%);
+  color: white;
+}
+
+/* Links */
+.footer-text {
+  font-size: 0.9rem;
+  color: #718096;
+  margin-bottom: 0.5rem;
+}
+
+.footer-small {
+  font-size: 0.8rem;
+  color: #a0aec0;
+  margin-bottom: 1.5rem;
+}
+
+.seamless-link {
+  color: #667eea;
+  text-decoration: none;
+  font-weight: 700;
+  transition: color 0.3s ease;
+}
+
+.seamless-link:hover {
+  color: #5a67d8;
+  text-decoration: underline;
+}
+
+.seamless-link-secondary {
+  color: #718096;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+
+.seamless-link-secondary:hover {
+  color: #4a5568;
+}
+
+.security-badge {
+  font-size: 0.7rem;
+  color: #a0aec0;
+  padding: 0.5rem 1rem;
+  background: rgba(247, 250, 252, 0.8);
+  border-radius: 20px;
+  display: inline-block;
+  backdrop-filter: blur(10px);
+}
+
+/* Responsive Design */
+@media (max-width: 991.98px) {
+  .enterprise-landscape {
+    background: #ffffff;
+  }
+  
+  .corporate-banner {
+    height: 40vh !important;
+    min-height: 300px;
+  }
+  
+  .seamless-form-section {
+    height: 60vh !important;
+    min-height: 400px;
+    width: 100% !important;
+    flex: 0 0 100% !important;
+    max-width: 100% !important;
+    border-left: none;
+    box-shadow: none;
+  }
+  
+  .seamless-form-container {
+    padding: 2rem 1.5rem;
+  }
+  
+  .banner-logo {
+    width: 120px;
+    height: 120px;
+    margin-bottom: 1rem;
+  }
+}
+
+/* Smooth animations */
+* {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Custom scrollbar for mobile */
+@media (max-height: 700px) {
+  .seamless-form-container {
+    overflow-y: auto;
+    max-height: 90vh;
+    padding: 2rem;
+  }
+  
+  .seamless-form-container::-webkit-scrollbar {
+    width: 4px;
+  }
+  
+  .seamless-form-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 2px;
+  }
+  
+  .seamless-form-container::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    border-radius: 2px;
+  }
+}
+
+/* Glass morphism effect for form section */
+@media (min-width: 992px) {
+  .seamless-form-section {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(30px);
+    -webkit-backdrop-filter: blur(30px);
+    border: none;
+  }
+}
+
+/* Fix for banner content alignment */
+.corporate-banner > .motion-div {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }

@@ -1,0 +1,63 @@
+import React, { useState } from 'react';
+import { Modal, Button, Form, Alert } from 'react-bootstrap';
+
+const AssignEmployeeModal = ({ show, onHide, ticket, employees, onAssign }) => {
+  const [selectedEmployee, setSelectedEmployee] = useState('');
+  const [error, setError] = useState('');
+
+  const handleAssign = () => {
+    if (!selectedEmployee) {
+      setError('Please select an employee');
+      return;
+    }
+
+    onAssign(ticket.id, selectedEmployee);
+    setSelectedEmployee('');
+    setError('');
+  };
+
+  return (
+    <Modal show={show} onHide={onHide}>
+      <Modal.Header closeButton>
+        <Modal.Title>Assign Employee to Ticket #{ticket?.id}</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        {error && <Alert variant="danger">{error}</Alert>}
+        
+        <Form.Group>
+          <Form.Label>Select Employee</Form.Label>
+          <Form.Select
+            value={selectedEmployee}
+            onChange={(e) => setSelectedEmployee(e.target.value)}
+          >
+            <option value="">Choose an employee...</option>
+            {employees.map(employee => (
+              <option key={employee.id} value={employee.id}>
+                {employee.name} - {employee.department || 'No Department'}
+              </option>
+            ))}
+          </Form.Select>
+        </Form.Group>
+
+        {ticket && (
+          <div className="mt-3">
+            <h6>Ticket Details:</h6>
+            <p><strong>Title:</strong> {ticket.title}</p>
+            <p><strong>Priority:</strong> {ticket.priority}</p>
+            <p><strong>Status:</strong> {ticket.status}</p>
+          </div>
+        )}
+      </Modal.Body>
+      <Modal.Footer>
+        <Button variant="secondary" onClick={onHide}>
+          Cancel
+        </Button>
+        <Button variant="primary" onClick={handleAssign}>
+          Assign Employee
+        </Button>
+      </Modal.Footer>
+    </Modal>
+  );
+};
+
+export default AssignEmployeeModal;

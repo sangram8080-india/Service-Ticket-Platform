@@ -1,118 +1,38 @@
-/* Custom styles for the service request form */
 .service-request-container {
-    max-width: 900px;
-}
-
-.card-header{
-        background:rgb(223 119 47 / 90%);
-}
-
-
-.card {
-    border: none;
-    border-radius: 12px;
-    overflow: hidden;
+  max-width: 800px;
+  margin: 0 auto;
 }
 
 .card-header {
-    padding: 1.5rem 2rem;
+  background: linear-gradient(135deg, #3a8ffe 0%, #1e4db5 100%);
+  border-radius: 0 !important;
 }
 
-.section-title {
-    color: #2c3e50;
-    border-bottom: 2px solid #f0f0f0;
-    padding-bottom: 0.5rem;
-    margin-bottom: 1rem;
+.card {
+  border-radius: 10px;
+  overflow: hidden;
 }
 
-.form-label {
-    margin-bottom: 0.5rem;
+.form-label.fw-bold {
+  font-weight: 600;
+  margin-bottom: 8px;
 }
 
-.form-control-lg, .form-select-lg {
-    padding: 0.75rem 1rem;
-    border-radius: 8px;
-    border: 1px solid #ced4da;
+.form-control, .form-select {
+  padding: 12px 15px;
+  border-radius: 8px;
+  border: 1px solid #dee2e6;
+  transition: all 0.3s;
 }
 
-.priority-options {
-    background-color: #f8f9fa;
-    padding: 1rem;
-    border-radius: 8px;
-}
-
-.priority-indicator {
-    display: inline-block;
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    margin-right: 8px;
-}
-
-.priority-indicator.high {
-    background-color: #dc3545;
-}
-
-.priority-indicator.medium {
-    background-color: #fd7e14;
-}
-
-.priority-indicator.low {
-    background-color: #28a745;
-}
-
-.form-check-input.priority-high:checked {
-    background-color: #dc3545;
-    border-color: #dc3545;
-}
-
-.form-check-input.priority-medium:checked {
-    background-color: #fd7e14;
-    border-color: #fd7e14;
-}
-
-.form-check-input.priority-low:checked {
-    background-color: #28a745;
-    border-color: #28a745;
-}
-
-.file-upload-area {
-    border: 2px dashed #dee2e6;
-    border-radius: 12px;
-    padding: 2rem;
-    text-align: center;
-    transition: all 0.3s;
-}
-
-.file-upload-area:hover {
-    border-color: #0d6efd;
-    background-color: rgba(13, 110, 253, 0.05);
-}
-
-.file-upload-label {
-    cursor: pointer;
-    display: block;
-}
-
-.file-upload-content {
-    color: #6c757d;
-}
-
-.file-preview {
-    margin-top: 1rem;
-}
-
-.list-group-item {
-    border-radius: 6px !important;
-    margin-bottom: 0.5rem;
+.form-control:focus, .form-select:focus {
+  border-color: #3a8ffe;
+  box-shadow: 0 0 0 0.25rem rgba(58, 143, 254, 0.25);
 }
 
 .btn-lg {
-    border-radius: 8px;
-    font-size: 1.1rem;
-}
-
-.bg-gradient-orange {
-  background-color: rgb(249 115 22 / var(--tw-bg-opacity, 1));
-  font-weight: bold;
+  padding: 12px 20px;
+  font-size: 1.1rem;
+  border-radius: 8px;
+  font-weight: 600;
 }

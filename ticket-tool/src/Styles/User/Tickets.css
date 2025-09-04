@@ -1,0 +1,63 @@
+.tickets-page {
+  padding: 2rem 0;
+}
+
+.ticket-filters {
+  background-color: #f8fafc;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.ticket-table {
+  background-color: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.ticket-table thead th {
+  background-color: #f1f5f9;
+  font-weight: 600;
+  color: #475569;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  letter-spacing: 0.5px;
+}
+
+.ticket-table tbody tr {
+  transition: background-color 0.2s ease;
+}
+
+.ticket-table tbody tr:hover {
+  background-color: #f8fafc;
+}
+
+.empty-state {
+  padding: 3rem;
+  background-color: #f8fafc;
+  border-radius: 12px;
+  border: 2px dashed #e2e8f0;
+  text-align: center;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.sort-icon {
+  transition: transform 0.3s ease;
+  opacity: 0.5;
+}
+
+.sort-icon.active {
+  opacity: 1;
+}
+
+.sort-icon.asc {
+  transform: rotate(180deg);
+}
+
+.max-w-200 {
+  max-width: 200px;
+}

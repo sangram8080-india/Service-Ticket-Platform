@@ -10,6 +10,8 @@ import Footer from "../Components/Footer";
 import CountUp from "react-countup";
 import { motion } from "framer-motion";
 import CustomNavbar from "../Components/CustomNavbar";
+import HomepageChatbot from '../Components/HomepageChatbot';
+
 const metrics = [
   { count: 1000000, duration: 1.2, suffix: "+", label: "Tickets Resolved" },
   { count: 50000, duration: 1.1, suffix: "+", label: "Active Users" },
@@ -18,7 +20,8 @@ const metrics = [
 ];
 
 export default function Home() {
-    const orange = "#F7941D";
+  const orange = "#F7941D";
+  
   return (
     <>
       <CustomNavbar />
@@ -92,7 +95,7 @@ export default function Home() {
                 transition={{ duration: 0.6, delay: 1.1 }}
               >
                 <Link
-                  to="/signup"
+                  to="/SignUp"
                   className="btn bg-gradient-orange btn-lg me-3"
                 >
                   Sign Up
@@ -208,7 +211,13 @@ export default function Home() {
             </Row>
 
             <div className="text-center mt-5">
-              <Button variant="primary" size="lg" className="me-3 px-4 fw-bold">
+              <Button 
+                as={Link} 
+                to="/contact" 
+                variant="primary" 
+                size="lg" 
+                className="me-3 px-4 fw-bold"
+              >
                 Contact Sales
               </Button>
               <Link to="/login">
@@ -228,7 +237,7 @@ export default function Home() {
         <div className="helpdesk-section py-5 text-center">
           <Container>
             <h2 className="fw-bold mb-5">
-              Help Desk Software for today’s <br /> fast-changing global
+              Help Desk Software for today's <br /> fast-changing global
               businesses
             </h2>
             <Row className="g-4 justify-content-center">
@@ -279,12 +288,54 @@ export default function Home() {
             </Button>
           </Container>
         </div>
+
+        {/* ---------- Additional Links Section ---------- */}
+        <section className="additional-links py-5 bg-light">
+          <Container>
+            <Row className="text-center">
+              <Col md={6} className="mb-4 mb-md-0">
+                <div className="p-4 h-100 bg-white rounded shadow-sm">
+                  <h3 className="fw-bold mb-3">Learn More About Us</h3>
+                  <p className="mb-4">
+                    Discover our mission, values, and the team behind ServiceHub's 
+                    innovative help desk solutions.
+                  </p>
+                  <Button 
+                    as={Link} 
+                    to="/about" 
+                    variant="outline-primary" 
+                    size="lg"
+                  >
+                    About Us
+                  </Button>
+                </div>
+              </Col>
+              <Col md={6}>
+                <div className="p-4 h-100 bg-white rounded shadow-sm">
+                  <h3 className="fw-bold mb-3">Get In Touch</h3>
+                  <p className="mb-4">
+                    Have questions or need support? Our team is here to help you 
+                    get the most out of ServiceHub.
+                  </p>
+                  <Button 
+                    as={Link} 
+                    to="/contact" 
+                    variant="primary" 
+                    size="lg"
+                  >
+                    Contact Us
+                  </Button>
+                </div>
+              </Col>
+            </Row>
+          </Container>
+        </section>
       </div>
       
-      {/* ----------------------------------------------------------- */}
-
-      {/* --------------------------------- */}
-      {/* footer  */}
+      {/* Chatbot Component - Fixed with higher z-index */}
+      <HomepageChatbot />
+      
+      {/* Footer */}
       <Footer />
     </>
   );
