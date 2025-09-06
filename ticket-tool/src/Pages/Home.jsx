@@ -21,7 +21,7 @@ const metrics = [
 
 export default function Home() {
   const orange = "#F7941D";
-  
+
   return (
     <>
       <CustomNavbar />
@@ -211,11 +211,11 @@ export default function Home() {
             </Row>
 
             <div className="text-center mt-5">
-              <Button 
-                as={Link} 
-                to="/contact" 
-                variant="primary" 
-                size="lg" 
+              <Button
+                as={Link}
+                to="/contact"
+                variant="primary"
+                size="lg"
                 className="me-3 px-4 fw-bold"
               >
                 Contact Sales
@@ -297,13 +297,13 @@ export default function Home() {
                 <div className="p-4 h-100 bg-white rounded shadow-sm">
                   <h3 className="fw-bold mb-3">Learn More About Us</h3>
                   <p className="mb-4">
-                    Discover our mission, values, and the team behind ServiceHub's 
+                    Discover our mission, values, and the team behind ServiceHub's
                     innovative help desk solutions.
                   </p>
-                  <Button 
-                    as={Link} 
-                    to="/about" 
-                    variant="outline-primary" 
+                  <Button
+                    as={Link}
+                    to="/about"
+                    variant="outline-primary"
                     size="lg"
                   >
                     About Us
@@ -314,13 +314,13 @@ export default function Home() {
                 <div className="p-4 h-100 bg-white rounded shadow-sm">
                   <h3 className="fw-bold mb-3">Get In Touch</h3>
                   <p className="mb-4">
-                    Have questions or need support? Our team is here to help you 
+                    Have questions or need support? Our team is here to help you
                     get the most out of ServiceHub.
                   </p>
-                  <Button 
-                    as={Link} 
-                    to="/contact" 
-                    variant="primary" 
+                  <Button
+                    as={Link}
+                    to="/contact"
+                    variant="primary"
                     size="lg"
                   >
                     Contact Us
@@ -331,10 +331,10 @@ export default function Home() {
           </Container>
         </section>
       </div>
-      
+
       {/* Chatbot Component - Fixed with higher z-index */}
       <HomepageChatbot />
-      
+
       {/* Footer */}
       <Footer />
     </>

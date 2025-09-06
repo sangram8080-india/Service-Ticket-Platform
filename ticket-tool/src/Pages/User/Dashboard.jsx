@@ -1,56 +1,56 @@
 import React, { useState, useEffect, useContext, useRef } from 'react';
-import { 
-  Card, 
-  Col, 
-  Row, 
-  Container, 
-  Button, 
-  Badge, 
-  Table, 
-  Modal, 
-  Spinner, 
-  Form, 
-  Alert, 
-  InputGroup,
-  Dropdown,
-  Toast,
-  ToastContainer
+import {
+    Card,
+    Col,
+    Row,
+    Container,
+    Button,
+    Badge,
+    Table,
+    Modal,
+    Spinner,
+    Form,
+    Alert,
+    InputGroup,
+    Dropdown,
+    Toast,
+    ToastContainer
 } from 'react-bootstrap';
-import { 
-  Ticket, 
-  Clock, 
-  CheckCircle, 
-  ExclamationCircle, 
-  Plus, 
-  PersonCircle, 
-  FileEarmark, 
-  GeoAlt, 
-  Calendar, 
-  InfoCircle,
-  Chat, 
-  Telephone, 
-  Envelope, 
-  Send, 
-  Bell, 
-  BellFill, 
-  Search,
-  ArrowRepeat,
-  XCircle,
-  Filter,
-  SortDown,
-  SortUp,
-  ThreeDotsVertical
+import {
+    Ticket,
+    Clock,
+    CheckCircle,
+    ExclamationCircle,
+    Plus,
+    PersonCircle,
+    FileEarmark,
+    GeoAlt,
+    Calendar,
+    InfoCircle,
+    Chat,
+    Telephone,
+    Envelope,
+    Send,
+    Bell,
+    BellFill,
+    Search,
+    ArrowRepeat,
+    XCircle,
+    Filter,
+    SortDown,
+    SortUp,
+    ThreeDotsVertical
 } from 'react-bootstrap-icons';
 import { Bar, Pie } from 'react-chartjs-2';
-import { 
-  Chart as ChartJS, 
-  Title, 
-  Tooltip, 
-  Legend, 
-  ArcElement, 
-  CategoryScale, 
-  LinearScale, 
-  BarElement
+import {
+    Chart as ChartJS,
+    Title,
+    Tooltip,
+    Legend,
+    ArcElement,
+    CategoryScale,
+    LinearScale,
+    BarElement
 } from 'chart.js';
 import { AuthContext } from '../../context/AuthContext';
 import { Client } from '@stomp/stompjs';
@@ -92,7 +92,7 @@ const Dashboard = () => {
     const [connectionStatus, setConnectionStatus] = useState('disconnected');
     const [sortConfig, setSortConfig] = useState({ key: 'createdAt', direction: 'desc' });
     const messagesEndRef = useRef(null);
-    
+
     const { user } = useContext(AuthContext);
     const userId = user?.id;
     const userRole = user?.role;
@@ -109,16 +109,16 @@ const Dashboard = () => {
                 "Content-Type": "application/json",
                 ...options.headers,
             };
-            
+
             if (token) {
                 headers["Authorization"] = `Bearer ${token}`;
             }
-            
+
             const response = await fetch(`${API_BASE}${endpoint}`, {
                 ...options,
                 headers,
             });
-            
+
             if (!response.ok) {
                 if (response.status === 401) {
                     setError("Authentication token is missing or invalid. Please login again.");
@@ -130,7 +130,7 @@ const Dashboard = () => {
                 }
                 throw new Error(`API error: ${response.status}`);
             }
-            
+
             return await response.json();
         } catch (error) {
             console.error("API call failed:", error);
@@ -144,9 +144,9 @@ const Dashboard = () => {
             try {
                 // Fetch user tickets
                 const tickets = await apiCall(`/tickets/user/${userId}`);
-                
+
                 if (!tickets) return; // API call failed
-                
+
                 setAllTickets(tickets);
 
                 // Calculate stats
@@ -154,7 +154,7 @@ const Dashboard = () => {
                 const openTickets = tickets.filter(t => t.status === 'OPEN').length;
                 const inProgress = tickets.filter(t => t.status === 'IN_PROGRESS').length;
                 const resolved = tickets.filter(t => t.status === 'RESOLVED' || t.status === 'RESOLVE').length;
-                
+
                 setStats({ totalTickets, openTickets, inProgress, resolved });
 
                 // Prepare chart data
@@ -203,7 +203,7 @@ const Dashboard = () => {
 
                 // Fetch initial notifications
                 await fetchNotifications();
-                
+
                 setLoading(false);
             } catch (err) {
                 console.error('Dashboard error:', err);
@@ -211,7 +211,7 @@ const Dashboard = () => {
                 setLoading(false);
             }
         };
-        
+
         if (userId) {
             fetchData();
         }
@@ -243,8 +243,8 @@ const Dashboard = () => {
 
     // Filter tickets based on search term and status filter
     const filteredTickets = allTickets.filter(ticket => {
-        const matchesSearch = ticket.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                             ticket.id.toString().includes(searchTerm);
+        const matchesSearch = ticket.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            ticket.id.toString().includes(searchTerm);
         const matchesStatus = statusFilter === 'ALL' || ticket.status === statusFilter;
         const matchesPriority = priorityFilter === 'ALL' || ticket.priority === priorityFilter;
         return matchesSearch && matchesStatus && matchesPriority;
@@ -274,13 +274,13 @@ const Dashboard = () => {
 
     const connectWebSocket = (ticketId) => {
         setConnectionStatus('connecting');
-        
+
         // Get the authentication token
         const token = localStorage.getItem('token');
-        
+
         // Create SockJS with query parameter for authentication
         const socket = new SockJS(`${API_BASE}/ws?token=${token}`);
-        
+
         const client = new Client({
             webSocketFactory: () => socket,
             reconnectDelay: 5000,
@@ -292,7 +292,7 @@ const Dashboard = () => {
             onConnect: () => {
                 setConnectionStatus('connected');
                 console.log('WebSocket connected successfully');
-                
+
                 // Subscribe to the ticket's chat topic
                 client.subscribe(`/topic/chat.${ticketId}`, (message) => {
                     try {
@@ -301,14 +301,14 @@ const Dashboard = () => {
                             ...prev,
                             messages: [...(prev?.messages || []), newMessage]
                         }));
-                        
+
                         // Add blinking effect for new messages
                         setBlinkingMessages(prev => {
                             const newSet = new Set(prev);
                             newSet.add(newMessage.id);
                             return newSet;
                         });
-                        
+
                         // Remove blinking effect after 3 seconds
                         setTimeout(() => {
                             setBlinkingMessages(prev => {
@@ -317,7 +317,7 @@ const Dashboard = () => {
                                 return newSet;
                             });
                         }, 3000);
-                        
+
                         // Mark message as read if it's from someone else
                         if (newMessage.senderId !== userId) {
                             markMessageAsRead(newMessage.id);
@@ -399,12 +399,12 @@ const Dashboard = () => {
             await apiCall(`/notifications/${notificationId}/read`, {
                 method: 'PUT'
             });
-            
+
             // Update local state
-            setNotifications(prev => 
-                prev.map(notification => 
-                    notification.id === notificationId 
-                        ? { ...notification, read: true } 
+            setNotifications(prev =>
+                prev.map(notification =>
+                    notification.id === notificationId
+                        ? { ...notification, read: true }
                         : notification
                 )
             );
@@ -414,17 +414,17 @@ const Dashboard = () => {
     };
 
     const getStatusBadge = (status) => {
-        switch(status) {
+        switch (status) {
             case 'OPEN': return <Badge bg="warning" className="text-dark">Open</Badge>;
             case 'IN_PROGRESS': return <Badge bg="primary">In Progress</Badge>;
-            case 'RESOLVED': 
+            case 'RESOLVED':
             case 'RESOLVE': return <Badge bg="success">Resolved</Badge>;
             default: return <Badge bg="secondary">{status}</Badge>;
         }
     };
 
     const getPriorityIcon = (priority) => {
-        switch(priority) {
+        switch (priority) {
             case 'HIGH': return <ExclamationCircle className="text-danger me-1" />;
             case 'MEDIUM': return <ExclamationCircle className="text-warning me-1" />;
             default: return <ExclamationCircle className="text-info me-1" />;
@@ -443,15 +443,15 @@ const Dashboard = () => {
     const handleViewTicket = async (ticket) => {
         setSelectedTicket(ticket);
         setShowTicketModal(true);
-        
+
         // Fetch employee details if ticket is assigned
         if (ticket.assignedToId) {
             await fetchEmployeeDetails(ticket.assignedToId);
         }
-        
+
         // Fetch ticket messages
         await fetchTicketMessages(ticket.id);
-        
+
         // Reset unread count for this ticket
         setUnreadCounts(prev => ({ ...prev, [ticket.id]: 0 }));
     };
@@ -459,7 +459,7 @@ const Dashboard = () => {
     const fetchTicketMessages = async (ticketId) => {
         try {
             const response = await apiCall(`/messages/${ticketId}`);
-            
+
             setSelectedTicket(prev => ({
                 ...prev,
                 messages: response
@@ -472,9 +472,9 @@ const Dashboard = () => {
     const handleAddComment = async (e) => {
         e.preventDefault();
         if (!ticketComments.trim() || !stompClient || !selectedTicket) return;
-        
+
         setCommentSending(true);
-        
+
         try {
             const chatMessage = {
                 ticketId: selectedTicket.id,
@@ -485,13 +485,13 @@ const Dashboard = () => {
                 timestamp: new Date(),
                 messageType: "TEXT"
             };
-            
+
             stompClient.publish({
                 destination: `/app/chat.send.${selectedTicket.id}`,
                 body: JSON.stringify(chatMessage),
                 headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
             });
-            
+
             setTicketComments('');
         } catch (err) {
             console.error('Failed to send message:', err);
@@ -509,18 +509,18 @@ const Dashboard = () => {
                 userName: user?.name || 'User',
                 typing: true
             };
-            
+
             stompClient.publish({
                 destination: `/app/chat.typing.${selectedTicket.id}`,
                 body: JSON.stringify(typingNotification),
                 headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
             });
-            
+
             // Clear previous timeout
             if (typingTimeout) {
                 clearTimeout(typingTimeout);
             }
-            
+
             // Set timeout to send "stop typing" after 2 seconds
             const timeout = setTimeout(() => {
                 const stopTyping = {
@@ -529,7 +529,7 @@ const Dashboard = () => {
                     userName: user?.name || 'User',
                     typing: false
                 };
-                
+
                 if (stompClient) {
                     stompClient.publish({
                         destination: `/app/chat.typing.${selectedTicket.id}`,
@@ -538,7 +538,7 @@ const Dashboard = () => {
                     });
                 }
             }, 2000);
-            
+
             setTypingTimeout(timeout);
         }
     };
@@ -575,7 +575,7 @@ const Dashboard = () => {
     };
 
     const getConnectionStatusBadge = () => {
-        switch(connectionStatus) {
+        switch (connectionStatus) {
             case 'connected': return <Badge bg="success">Connected</Badge>;
             case 'connecting': return <Badge bg="warning">Connecting...</Badge>;
             case 'error': return <Badge bg="danger">Connection Error</Badge>;
@@ -585,7 +585,7 @@ const Dashboard = () => {
 
     const renderSortIcon = (key) => {
         if (sortConfig.key !== key) return <ThreeDotsVertical className="ms-1 text-muted" />;
-        return sortConfig.direction === 'asc' ? 
+        return sortConfig.direction === 'asc' ?
             <SortUp className="ms-1" /> : <SortDown className="ms-1" />;
     };
 
@@ -629,7 +629,7 @@ const Dashboard = () => {
                         <Plus className="me-2" /> New Ticket
                     </Button>
                 </div>
-                
+
                 {stats.totalTickets === 0 ? (
                     <Card className="border-0 shadow-sm text-center py-5">
                         <ExclamationCircle size={48} className="text-muted mb-3" />
@@ -656,7 +656,7 @@ const Dashboard = () => {
                                     </Card.Body>
                                 </Card>
                             </Col>
-                            
+
                             <Col md={3} sm={6}>
                                 <Card className="stat-card border-0 shadow-sm h-100">
                                     <Card.Body className="d-flex justify-content-between align-items-center">
@@ -670,7 +670,7 @@ const Dashboard = () => {
                                     </Card.Body>
                                 </Card>
                             </Col>
-                            
+
                             <Col md={3} sm={6}>
                                 <Card className="stat-card border-0 shadow-sm h-100">
                                     <Card.Body className="d-flex justify-content-between align-items-center">
@@ -684,7 +684,7 @@ const Dashboard = () => {
                                     </Card.Body>
                                 </Card>
                             </Col>
-                            
+
                             <Col md={3} sm={6}>
                                 <Card className="stat-card border-0 shadow-sm h-100">
                                     <Card.Body className="d-flex justify-content-between align-items-center">
@@ -699,7 +699,7 @@ const Dashboard = () => {
                                 </Card>
                             </Col>
                         </Row>
-                        
+
                         {/* Analytics Charts */}
                         <Row className="mb-4 g-4">
                             <Col lg={6}>
@@ -708,14 +708,14 @@ const Dashboard = () => {
                                         <h5 className="fw-bold mb-4">Status Distribution</h5>
                                         {chartData.statusDistribution && (
                                             <div className="chart-container" style={{ height: '300px' }}>
-                                                <Pie 
-                                                    data={chartData.statusDistribution} 
-                                                    options={{ 
+                                                <Pie
+                                                    data={chartData.statusDistribution}
+                                                    options={{
                                                         maintainAspectRatio: false,
-                                                        plugins: { 
-                                                            legend: { position: 'bottom' } 
-                                                        } 
-                                                    }} 
+                                                        plugins: {
+                                                            legend: { position: 'bottom' }
+                                                        }
+                                                    }}
                                                 />
                                             </div>
                                         )}
@@ -728,15 +728,15 @@ const Dashboard = () => {
                                         <h5 className="fw-bold mb-4">Priority Distribution</h5>
                                         {chartData.priorityDistribution && (
                                             <div className="chart-container" style={{ height: '300px' }}>
-                                                <Bar 
-                                                    data={chartData.priorityDistribution} 
-                                                    options={{ 
+                                                <Bar
+                                                    data={chartData.priorityDistribution}
+                                                    options={{
                                                         maintainAspectRatio: false,
                                                         scales: { y: { beginAtZero: true } },
                                                         plugins: {
                                                             legend: { display: false }
                                                         }
-                                                    }} 
+                                                    }}
                                                 />
                                             </div>
                                         )}
@@ -744,14 +744,14 @@ const Dashboard = () => {
                                 </Card>
                             </Col>
                         </Row>
-                        
+
                         {/* Ticket Management Section */}
                         <Card className="border-0 shadow-sm">
                             <Card.Body>
                                 <div className="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-4">
                                     <h4 className="fw-bold mb-3 mb-md-0">Your Tickets</h4>
                                 </div>
-                                
+
                                 {/* Search and Filter Controls */}
                                 <Row className="mb-4">
                                     <Col md={5}>
@@ -801,7 +801,7 @@ const Dashboard = () => {
                                         </InputGroup>
                                     </Col>
                                 </Row>
-                                
+
                                 <div className="table-responsive">
                                     <Table hover className="mb-0">
                                         <thead>
@@ -855,8 +855,8 @@ const Dashboard = () => {
                                                         <td>{ticket.assignedTo || 'Not assigned'}</td>
                                                         <td>{new Date(ticket.createdAt).toLocaleDateString()}</td>
                                                         <td>
-                                                            <Button 
-                                                                variant="outline-primary" 
+                                                            <Button
+                                                                variant="outline-primary"
                                                                 size="sm"
                                                                 onClick={() => handleViewTicket(ticket)}
                                                             >
@@ -869,7 +869,7 @@ const Dashboard = () => {
                                                 <tr>
                                                     <td colSpan="7" className="text-center py-4">
                                                         {searchTerm || statusFilter !== 'ALL' || priorityFilter !== 'ALL'
-                                                            ? 'No tickets match your search criteria' 
+                                                            ? 'No tickets match your search criteria'
                                                             : 'No tickets found'}
                                                     </td>
                                                 </tr>
@@ -882,10 +882,10 @@ const Dashboard = () => {
                     </>
                 )}
             </Container>
-            
+
             {/* Ticket Details Modal */}
-            <Modal 
-                show={showTicketModal} 
+            <Modal
+                show={showTicketModal}
                 onHide={handleCloseModal}
                 centered
                 size="lg"
@@ -897,24 +897,24 @@ const Dashboard = () => {
                         Ticket #{selectedTicket?.id || 'Loading...'}
                     </Modal.Title>
                 </Modal.Header>
-                
+
                 <Modal.Body className="pt-0" style={{ maxHeight: '70vh', overflowY: 'auto' }}>
                     {selectedTicket ? (
                         <div className="ticket-details">
                             <div className="d-flex justify-content-between align-items-center mb-4">
                                 <h4 className="fw-bold mb-0">{selectedTicket.title}</h4>
                                 <Badge bg={
-                                    selectedTicket.status === 'RESOLVED' || selectedTicket.status === 'RESOLVE' ? 'success' : 
-                                    selectedTicket.status === 'IN_PROGRESS' ? 'primary' : 'warning'
+                                    selectedTicket.status === 'RESOLVED' || selectedTicket.status === 'RESOLVE' ? 'success' :
+                                        selectedTicket.status === 'IN_PROGRESS' ? 'primary' : 'warning'
                                 }>
                                     {selectedTicket.status}
                                 </Badge>
                             </div>
-                            
+
                             <div className="mb-4">
                                 <p className="text-muted">{selectedTicket.description}</p>
                             </div>
-                            
+
                             <Row className="mb-4">
                                 <Col md={6}>
                                     <div className="d-flex align-items-center mb-3">
@@ -928,7 +928,7 @@ const Dashboard = () => {
                                             </div>
                                         </div>
                                     </div>
-                                    
+
                                     <div className="d-flex align-items-center mb-3">
                                         <div className="icon-wrapper bg-light rounded-circle p-2 me-3">
                                             <Calendar size={20} className="text-primary" />
@@ -941,7 +941,7 @@ const Dashboard = () => {
                                         </div>
                                     </div>
                                 </Col>
-                                
+
                                 <Col md={6}>
                                     <div className="d-flex align-items-center mb-3">
                                         <div className="icon-wrapper bg-light rounded-circle p-2 me-3">
@@ -952,7 +952,7 @@ const Dashboard = () => {
                                             <div className="fw-medium">{selectedTicket.location || 'Not specified'}</div>
                                         </div>
                                     </div>
-                                    
+
                                     <div className="d-flex align-items-center">
                                         <div className="icon-wrapper bg-light rounded-circle p-2 me-3">
                                             <InfoCircle size={20} className="text-primary" />
@@ -964,7 +964,7 @@ const Dashboard = () => {
                                     </div>
                                 </Col>
                             </Row>
-                            
+
                             {/* Employee Contact Information */}
                             {employeeDetails && (
                                 <Card className="mb-4 border-0 shadow-sm">
@@ -1003,7 +1003,7 @@ const Dashboard = () => {
                                     </Card.Body>
                                 </Card>
                             )}
-                            
+
                             <div className="mb-4">
                                 <h6 className="fw-bold mb-3">Attachments</h6>
                                 <div className="d-flex flex-wrap gap-2">
@@ -1019,7 +1019,7 @@ const Dashboard = () => {
                                     )}
                                 </div>
                             </div>
-                            
+
                             <div className="mb-4">
                                 <div className="d-flex justify-content-between align-items-center mb-3">
                                     <h6 className="fw-bold mb-0">
@@ -1029,9 +1029,9 @@ const Dashboard = () => {
                                     <div className="d-flex align-items-center gap-2">
                                         {getConnectionStatusBadge()}
                                         {connectionStatus !== 'connected' && (
-                                            <Button 
-                                                variant="outline-primary" 
-                                                size="sm" 
+                                            <Button
+                                                variant="outline-primary"
+                                                size="sm"
                                                 onClick={reconnectWebSocket}
                                                 className="d-flex align-items-center"
                                             >
@@ -1045,15 +1045,15 @@ const Dashboard = () => {
                                 <div className="ticket-comments" style={{ maxHeight: '300px', overflowY: 'auto' }}>
                                     {(selectedTicket.messages || []).length > 0 ? (
                                         selectedTicket.messages.map((message, index) => (
-                                            <div 
-                                                key={index} 
+                                            <div
+                                                key={index}
                                                 className={`comment mb-3 p-3 ${message.senderType === userRole ? 'user-comment bg-primary text-white' : 'bg-light'} ${blinkingMessages.has(message.id) ? 'blinking-message' : ''}`}
                                             >
                                                 <div className="d-flex justify-content-between mb-2">
                                                     <span className="fw-bold">
-                                                        {message.senderType === userRole ? 'You' : 
-                                                         message.senderType === 'EMPLOYEE' ? employeeDetails?.name || 'Employee' : 
-                                                         message.senderType === 'ADMIN' ? 'Admin' : 'System'}
+                                                        {message.senderType === userRole ? 'You' :
+                                                            message.senderType === 'EMPLOYEE' ? employeeDetails?.name || 'Employee' :
+                                                                message.senderType === 'ADMIN' ? 'Admin' : 'System'}
                                                     </span>
                                                     <span className="small">
                                                         {formatMessageTime(message.timestamp)}
@@ -1070,7 +1070,7 @@ const Dashboard = () => {
                                     {typingUsers.length > 0 && (
                                         <div className="typing-indicator mb-2">
                                             <small className="text-muted">
-                                                {typingUsers.map(user => user.userName).join(', ')} 
+                                                {typingUsers.map(user => user.userName).join(', ')}
                                                 {typingUsers.length === 1 ? ' is ' : ' are '}
                                                 typing...
                                             </small>
@@ -1079,7 +1079,7 @@ const Dashboard = () => {
                                     <div ref={messagesEndRef} />
                                 </div>
                             </div>
-                            
+
                             <Form onSubmit={handleAddComment}>
                                 <Form.Group className="mb-3">
                                     <Form.Label>Add Message</Form.Label>
@@ -1096,8 +1096,8 @@ const Dashboard = () => {
                                             placeholder="Type your message here..."
                                             disabled={connectionStatus !== 'connected'}
                                         />
-                                        <Button 
-                                            variant="primary" 
+                                        <Button
+                                            variant="primary"
                                             type="submit"
                                             disabled={commentSending || !ticketComments.trim() || connectionStatus !== 'connected'}
                                         >
@@ -1129,11 +1129,11 @@ const Dashboard = () => {
             {/* Toast Container for Notifications */}
             <ToastContainer position="bottom-end" className="p-3">
                 {notifications.slice(0, 3).map((notification, index) => (
-                    <Toast 
-                        key={index} 
+                    <Toast
+                        key={index}
                         onClose={() => markNotificationAsRead(notification.id)}
-                        show={!notification.read} 
-                        delay={5000} 
+                        show={!notification.read}
+                        delay={5000}
                         autohide
                     >
                         <Toast.Header>
